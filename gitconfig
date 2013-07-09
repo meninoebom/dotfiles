@@ -1,0 +1,24 @@
+[user]
+	name = Brandon Brown
+	email = bbrown@johnmcneilstudio.com
+[core]
+	excludesfile = /Users/bbrown/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[color]
+	ui = true
+[alias]
+	st = status
+[alias]
+	pom = pull origin master
+[alias]
+	submodule-rm = pull origin master
+	clearstage = rm -r --cached
+[remote "stage"]
+	receivepack = git receive-pack
+[remote "staging"]
+	receivepack = git receive-pack
