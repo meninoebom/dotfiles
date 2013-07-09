@@ -1,6 +1,0 @@
-machine api.heroku.com
-  login brandon.brown@ymail.com
-  password 1e80b059-6b58-4583-9993-81f98f664396
-machine code.heroku.com
-  login brandon.brown@ymail.com
-  password 1e80b059-6b58-4583-9993-81f98f664396
