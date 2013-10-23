@@ -1,8 +1,9 @@
 [user]
 	name = Brandon Brown
-	email = bbrown@johnmcneilstudio.com
+	email = brandon.brown@ymail.com
 [core]
 	excludesfile = /Users/bbrown/.gitignore_global
+	editor = sublime -n -w
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -22,3 +23,12 @@
 	receivepack = git receive-pack
 [remote "staging"]
 	receivepack = git receive-pack
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+	trustExitCode = true
+[diff]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = diffmerge $LOCAL $REMOTE

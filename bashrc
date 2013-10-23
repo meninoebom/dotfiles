@@ -36,5 +36,4 @@ alias sdn="cd /Users/bbrown/dev/Juniper/sdn_flex/"
 #remote servers
 alias amazon="ssh bbrown@107.20.254.191" 
 alias rackspace="ssh -p 33333 interactive@50.57.40.207"
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+
