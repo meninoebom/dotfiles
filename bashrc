@@ -37,3 +37,6 @@ alias sdn="cd /Users/bbrown/dev/Juniper/sdn_flex/"
 alias amazon="ssh bbrown@107.20.254.191" 
 alias rackspace="ssh -p 33333 interactive@50.57.40.207"
 
+#tunnel for browserstack testing
+alias browserstack="java -jar BrowserStackTunnel.jar PRFi1G58XqJuwcz8PPjo localhost,9000,0"
+
