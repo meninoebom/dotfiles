@@ -18,3 +18,6 @@ install compass
 
 install xampp
 http://www.apachefriends.org/en/xampp.html
+
+Make a symbolic link to the shared version of your stickes database
+  `ln -s ~/Dropbox/Shared/SharedStickiesDatabase ~/Library/StickiesDatabase`
