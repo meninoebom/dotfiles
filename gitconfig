@@ -3,15 +3,30 @@
 	email = brandon.brown@ymail.com
 [core]
 	excludesfile = /Users/bbrown/.gitignore_global
-	editor = sublime -n -w
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+	editor = code --wait
+	autocrlf = false
+	safecrlf = true
+	pager = cat
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = code --wait --diff $LOCAL $REMOTE
 [color]
-	ui = true
+  	ui = auto
+[color "branch"]
+  	current = green reverse
+  	local = yellow
+  	remote = green
+[color "diff"]
+  	meta = yellow bold
+  	frag = magenta bold
+  	old = red bold
+  	new = green bold
+[color "status"]
+  	added = yellow
+  	changed = green
+  	untracked = cyan
+[color "hist"]
 [alias]
 	st = status
 [alias]
@@ -19,6 +34,8 @@
 [alias]
 	submodule-rm = pull origin master
 	clearstage = rm -r --cached
+[alias]
+    ignored = !git ls-files -v | grep "^[[:lower:]]"
 [remote "stage"]
 	receivepack = git receive-pack
 [remote "staging"]
@@ -26,9 +43,20 @@
 [merge]
 	tool = diffmerge
 [mergetool "diffmerge"]
-	cmd = diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+	cmd = /usr/local/bin/diffmerge --merge --result=\"$MERGED\"\"$LOCAL\" \"$BASE\" \"$REMOTE\"
 	trustExitCode = true
 [diff]
 	tool = diffmerge
 [difftool "diffmerge"]
 	cmd = diffmerge $LOCAL $REMOTE
+[alias]
+  co = checkout
+  cm = commit
+  st = status
+  br = branch
+  gl = log --oneline --decorate --graph
+  hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  type = cat-file -t
+  dump = cat-file -p
+[rerere]
+	enabled = true
