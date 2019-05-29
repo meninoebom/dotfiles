@@ -45,7 +45,7 @@ done
 
 # If NeoVim config exists, mv it 
 echo "Moving NeoVim config to $olddir"
-mv ~/.config/nvim/* $olddir/.config/nvim/
+mv ~/.config/nvim/* $olddir/
 
 # Create directories for NeoVim's config
 echo "Creating directories for NeoVim config if the don't exist"
