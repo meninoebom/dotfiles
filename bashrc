@@ -28,6 +28,7 @@ alias sandbox="cd ~/dev/sandbox"
 alias prism="cd ~/dev/prism"
 alias rap="cd ~/dev/rap-almanac"
 alias questionator="cd ~/dev/dk/questionator"
+alias dotfiles="cd ~/dotfiles"
 
 #remote servers
 alias amazon="ssh bbrown@107.20.254.191" 
