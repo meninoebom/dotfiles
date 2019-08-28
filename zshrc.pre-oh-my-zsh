@@ -1,0 +1,40 @@
+autoload colors zsh/terminfo
+colors
+
+
+# Auto cd
+setopt auto_cd
+
+
+# Autostart Tmux
+if [ "$TMUX" = "" ]; then tmux; fi
+
+
+# Spelling correction
+setopt correctall
+alias git status='nocorrect git status'
+
+
+# Antigen Package Manager
+if [[ ! -f ~/.antigen.zsh ]]; then
+  curl https://raw.githubusercontent.com/zsh-users/antigen/master/antigen.zsh > ~/.antigen.zsh
+fi
+source ~/.antigen.zsh
+
+
+# Syntax Highliting
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+
+# Autocomplete
+antigen bundle zsh-users/zsh-autosuggestions
+
+
+# Load ~/.bash_profile
+if [ -f ~/.bash_profile ]; then
+    . ~/.bash_profile;
+fi
+
+# Use Fuzzy Finder (I think)
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+

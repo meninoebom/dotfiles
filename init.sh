@@ -14,15 +14,18 @@ pip3 install neovim
 brew tap caskroom/fonts
 # brew cask install font-fira-code
 
-# Setting ZSH as Default Shell
-chsh -s /usr/local/bin/zsh
+# Manually setting Homebrew installed ZSH as Default Shell
+# chsh -s /usr/local/bin/zsh
+
+# Install Oh-My-Zsh (Not confident this is gonna work as of 08-27-2019)
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Remove Existing Configs
 # rm -rf ~/.vim ~/.vimrc ~/.zshrc ~/.tmux ~/.tmux.conf ~/.config/nvim 2> /dev/null
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="bashrc bash_profile gitconfig gitconfig_global netrc profile rvmrc tmux tmux.conf vim vimrc zshrc" 
+files="aliases.sh bashrc bash_profile gitconfig gitconfig_global netrc profile rvmrc tmux tmux.conf vim vimrc zshrc" 
 # list of files/folders to symlink in homedir
 
 # create dotfiles_old in homedir
@@ -51,9 +54,12 @@ mv ~/.config/nvim/* $olddir/
 echo "Creating directories for NeoVim config if the don't exist"
 mkdir -p ~/.config ~/.config/nvim
 
-# Create symlinks at expected locations for the various configs
-# ln -s ~/dotfiles/zshrc ~/.zshrc
-# ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
 echo "Creating symlink to for NeoVim config"
 ln -s $dir/vimrc ~/.config/nvim/init.vim
+
+echo "Creating symlink to NeoVim's config colorscheme directory"
+ln -s $dir/vim/colors ~/.config/nvim/colors
+
+# Set up vim-plug plugin manager
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
