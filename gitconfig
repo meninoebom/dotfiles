@@ -3,7 +3,7 @@
 	email = brandon.brown@ymail.com
 [core]
 	excludesfile = /Users/bbrown/.gitignore_global
-	editor = code --wait
+	editor = code --wait -n
 	autocrlf = false
 	safecrlf = true
 	pager = cat
@@ -59,4 +59,4 @@
   type = cat-file -t
   dump = cat-file -p
 [rerere]
-	enabled = true
+	enabled = false
