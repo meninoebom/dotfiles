@@ -2,8 +2,8 @@
 
 # Install workflow stuff
 brew install zsh tmux neovim/neovim/neovim python3 ag reattach-to-user-namespace
-brew tap caskroom/cask
-brew cask install iterm2
+brew tap homebrew/cask
+brew install iterm2 --cask
 
 # update NeoVim to support pip3 because some Vim plugins rely on it
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
@@ -11,7 +11,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 pip3 install neovim
 
 # Installing Fonts
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 # brew cask install font-fira-code
 
 # Manually setting Homebrew installed ZSH as Default Shell
