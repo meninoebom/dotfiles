@@ -16,6 +16,11 @@ call plug#begin('~/.local/share/nvim/plugged')
 " Unite is a commonly used resource for plugins to open panels and other temporary interfaces onscreen.
 Plug 'Shougo/unite.vim'
 
+" The NERDTree is a file system explorer for the Vim editor. 
+" Visually browse complex directory hierarchies, quickly open files for 
+" reading or editing, and perform basic file system operations 
+Plug 'preservim/nerdtree'
+
 " Indent guides
 Plug 'Yggdroot/indentLine'
 
@@ -75,6 +80,9 @@ Plug 'tpope/vim-markdown'
 
 " install Rigel colorscheme with vim-plug
 Plug 'Rigellute/rigel'
+
+" easily add and remove surrounding charactes
+Plug 'tpope/vim-surround'
 
 call plug#end()
 

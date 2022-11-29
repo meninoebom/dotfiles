@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Load Civiqs shell config
+source "${HOME}/.civiqs/etc/zshrc"
+
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/brandon/.oh-my-zsh"
 
@@ -68,7 +71,7 @@ ZSH_CUSTOM=~/dotfiles/oh-my-zsh-custom/
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ssh-agent copydir colored-man-pages)
+plugins=(git ssh-agent copydir colored-man-pages vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -100,3 +103,6 @@ source $ZSH/oh-my-zsh.sh
 # tabtab source for serverless package
 # uninstall by removing these lines
 [[ -f ~/.config/tabtab/__tabtab.zsh ]] && . ~/.config/tabtab/__tabtab.zsh || true
+
+# Init .rbenv
+eval "$(rbenv init - zsh)"
