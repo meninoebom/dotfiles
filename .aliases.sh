@@ -19,18 +19,19 @@ alias aliases="nvim ~/.aliases.sh"
 # Go to frequently used directories
 alias up='cd ..'
 alias desk='cd ~/Desktop'
-alias dev="cd ~/dev"
-alias civiqs="cd ~/dev/civiqs"
-alias civiqs_frontend="cd ~/dev/civiqs/civiqs_frontend"
-alias admin="cd ~/dev/civiqs/admin_frontend"
-alias frontend="cd ~/dev/civiqs/civiqs_frontend"
-alias modeler="cd ~/dev/civiqs/civiqs_modeler"
-alias questionator="cd ~/dev/civiqs/questionator"
-alias ops="cd ~/dev/civiqs/ops"
-alias sandbox="cd ~/dev/sandbox"
-alias rrl="cd ~/dev/rap-research-lab"
-alias rap="cd ~/dev/rap-research-lab"
-alias api="cd ~/dev/rap-research-lab/rap-almanac-api"
+alias Code="cd ~/Code"
+alias poppy="cd ~/Code/poppy"
+alias civiqs="cd ~/Code/civiqs"
+alias civiqs_frontend="cd ~/Code/civiqs/civiqs_frontend"
+alias admin="cd ~/Code/civiqs/admin_frontend"
+alias frontend="cd ~/Code/civiqs/civiqs_frontend"
+alias modeler="cd ~/Code/civiqs/civiqs_modeler"
+alias questionator="cd ~/Code/civiqs/questionator"
+alias ops="cd ~/Code/civiqs/ops"
+alias sandbox="cd ~/Code/sandbox"
+alias rrl="cd ~/Code/rap-research-lab"
+alias rap="cd ~/Code/rap-research-lab"
+alias api="cd ~/Code/rap-research-lab/rap-almanac-api"
 alias dotfiles="cd ~/dotfiles"
 
 # Remote servers
@@ -41,4 +42,4 @@ alias rackspace="ssh -p 33333 interactive@50.57.40.207"
 alias ghist="git log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias git-pull-submodules="git submodule foreach git pull origin master"
 
-# AWS
+alias dps='docker ps --format "table {{.Names}}\t{{.Ports}}"'

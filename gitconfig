@@ -1,8 +1,8 @@
 [user]
 	name = Brandon Brown
-	email = brandon.brown@ymail.com
+	email = afrobot@gmail.com
 [core]
-	excludesfile = /Users/bbrown/.gitignore_global
+	excludesfile = /Users/brandon/.gitignore_global
 	editor = code --wait -n
 	autocrlf = false
 	safecrlf = true
@@ -36,10 +36,10 @@
 	clearstage = rm -r --cached
 [alias]
     ignored = !git ls-files -v | grep "^[[:lower:]]"
-[remote "stage"]
-	receivepack = git receive-pack
-[remote "staging"]
-	receivepack = git receive-pack
+#[remote "stage"]
+#	receivepack = git receive-pack
+#[remote "staging"]
+#	receivepack = git receive-pack
 [merge]
 	tool = diffmerge
 [mergetool "diffmerge"]
@@ -60,3 +60,8 @@
   dump = cat-file -p
 [rerere]
 	enabled = false
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
