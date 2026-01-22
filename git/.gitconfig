@@ -3,7 +3,7 @@
 	email = afrobot@gmail.com
 [core]
 	excludesfile = /Users/brandon/.gitignore_global
-	editor = code --wait -n
+	editor = cursor --wait
 	autocrlf = false
 	safecrlf = true
 	pager = cat
@@ -58,6 +58,7 @@
   hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   type = cat-file -t
   dump = cat-file -p
+	g = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
 [rerere]
 	enabled = false
 [filter "lfs"]
@@ -65,3 +66,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[push]
+	default = current

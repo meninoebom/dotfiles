@@ -11,3 +11,6 @@ export NODE_PATH="/usr/local/lib/node"
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export TERM="xterm-color"
+
+. "$HOME/.local/bin/env"
+. "$HOME/.cargo/env"

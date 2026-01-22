@@ -1,0 +1,15 @@
+# Antidote plugin list
+# https://getantidote.github.io/
+
+# Completions
+zsh-users/zsh-completions
+
+# Oh-my-zsh plugins (cherry-picked)
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/ssh-agent
+ohmyzsh/ohmyzsh path:plugins/colored-man-pages
+ohmyzsh/ohmyzsh path:plugins/vi-mode
+
+# Syntax highlighting and autosuggestions (load last)
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting

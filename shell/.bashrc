@@ -11,3 +11,9 @@ parse_git_branch() {
 
 #PS1="\[\e[3;32m\]\w\[\e[0;33m\]\$(parse_git_branch)\[\e[0;36m\] ->\[\e[m\] "
 source ~/.civiqs/etc/bashrc
+
+PATH=~/.console-ninja/.bin:$PATH
+. "$HOME/.local/bin/env"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+. "$HOME/.cargo/env"
