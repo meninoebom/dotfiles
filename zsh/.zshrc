@@ -20,9 +20,11 @@ fi
 source ${zsh_plugins}.zsh
 
 # ------------------------------------------------------------------------------
-# Starship Prompt
+# Starship Prompt (disabled in Warp which has its own prompt features)
 # ------------------------------------------------------------------------------
-eval "$(starship init zsh)"
+if [[ -z "$WARP_IS_LOCAL_SHELL_SESSION" ]]; then
+  eval "$(starship init zsh)"
+fi
 
 # ------------------------------------------------------------------------------
 # Zoxide (smarter cd)
