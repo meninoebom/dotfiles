@@ -16,7 +16,7 @@ alias lti='eza --tree --icons'
 alias ltl='eza --tree --long --git --icons'
 
 # Edit frequently used files
-alias vimrc="nvim ~/.vimrc"
+alias vimrc="nvim ~/.config/nvim/init.lua"
 alias bash_profile="nvim ~/.bash_profile"
 alias profile="nvim ~/.profile"
 alias bashrc="nvim ~/.bashrc"
@@ -63,6 +63,7 @@ alias dkillf='docker kill $1'
 
 # Claude Code
 alias cc='claude --dangerously-skip-permissions'
+alias cc-config='cd ~/.claude/'
 alias commands='cd ~/.claude/commands/'
 alias knowledge='cd ~/.claude/knowledge-base/'
 alias agents='cd ~/.claude/agents/'

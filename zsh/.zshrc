@@ -1,5 +1,9 @@
 # ~/.zshrc - Antidote + Starship + Zoxide
 
+# Zsh options
+setopt AUTO_CD              # Type directory name to cd into it
+setopt CORRECT              # Suggest corrections for typos
+
 # Load Civiqs shell config (if exists)
 [[ -f "${HOME}/.civiqs/etc/zshrc" ]] && source "${HOME}/.civiqs/etc/zshrc"
 
@@ -52,7 +56,7 @@ export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Console Ninja
-PATH=~/.console-ninja/.bin:$PATH
+
 
 # Windsurf/Codeium
 export PATH="/Users/brandon/.codeium/windsurf/bin:$PATH"

@@ -1,53 +1,27 @@
 # Starship prompt configuration
 # https://starship.rs/config/
 
-# Timeout for commands (ms)
 command_timeout = 1000
 
-# Format - clean and minimal
+# Single line: directory + git branch, then prompt on new line
 format = """
-$directory\
-$git_branch\
-$git_status\
-$nodejs\
-$python\
-$java\
-$cmd_duration\
-$line_break\
+$directory$git_branch$git_status
 $character"""
 
 [directory]
-truncation_length = 3
-truncate_to_repo = true
+truncation_length = 4
+truncate_to_repo = false
 style = "bold cyan"
+read_only = " "
 
 [git_branch]
-format = "[$branch]($style) "
+format = "[$symbol$branch]($style) "
+symbol = " "
 style = "bold purple"
 
 [git_status]
-format = '([$all_status$ahead_behind]($style) )'
+format = '([$all_status$ahead_behind]($style))'
 style = "bold red"
-
-[nodejs]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "bold green"
-
-[python]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "bold yellow"
-
-[java]
-format = "[$symbol($version )]($style)"
-symbol = " "
-style = "bold red"
-
-[cmd_duration]
-min_time = 2000
-format = "[$duration]($style) "
-style = "bold yellow"
 
 [character]
 success_symbol = "[>](bold green)"
