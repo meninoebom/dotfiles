@@ -15,3 +15,7 @@ brew "eza"         # modern ls replacement
 
 # Editor + multiplexer
 brew "tmux"
+
+# Diagram rendering (for the `diagram` zsh function).
+# Uses mermaid.ink (web service) so no chromium dependency needed.
+brew "chafa"         # inline image viewer for any terminal

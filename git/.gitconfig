@@ -34,7 +34,7 @@
 	cm = commit
 	br = branch
 	gl = log --oneline --decorate --graph
-	g  = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
+	g = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
 	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	type = cat-file -t
 	dump = cat-file -p
