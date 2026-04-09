@@ -74,9 +74,10 @@ export PATH="/Users/brandon/.codeium/windsurf/bin:$PATH"
 [[ -f ~/.config/tabtab/__tabtab.zsh ]] && . ~/.config/tabtab/__tabtab.zsh || true
 
 # ------------------------------------------------------------------------------
-# Aliases
+# Aliases & functions
 # ------------------------------------------------------------------------------
 source ~/.aliases.sh
+[[ -f ~/.functions.sh ]] && source ~/.functions.sh
 export PATH="$HOME/.local/bin:$PATH"
 
 # OpenClaw Completion

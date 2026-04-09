@@ -124,6 +124,17 @@ Vi mode is on (`bindkey -v` in `.zshrc`). Insert mode is the default and looks l
 | `aliases` | `~/.aliases.sh` |
 | `hosts` | `/etc/hosts` (sudo) |
 
+### View the architecture diagram inline
+
+```bash
+cd ~/dotfiles && diagram
+```
+
+`diagram` extracts the first mermaid block from a markdown file (defaults to
+`./README.md`), renders it via [mermaid.ink](https://mermaid.ink), and displays
+the result in your terminal using `chafa` (or `imgcat` if available). Works in
+Warp, iTerm2, Kitty, and any sixel-capable terminal.
+
 ## Modifying the setup
 
 ### Add a tool
