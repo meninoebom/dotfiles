@@ -1,8 +1,12 @@
 # ~/.zshrc - Antidote + Starship + Zoxide
 
+# Ensure Homebrew is on PATH (needed when .zprofile isn't sourced, e.g. IDE terminals)
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # Zsh options
 setopt AUTO_CD              # Type directory name to cd into it
 setopt CORRECT              # Suggest corrections for typos
+bindkey -v                  # Vi keybindings
 
 # Load Civiqs shell config (if exists)
 [[ -f "${HOME}/.civiqs/etc/zshrc" ]] && source "${HOME}/.civiqs/etc/zshrc"
@@ -22,7 +26,7 @@ source ${zsh_plugins}.zsh
 # ------------------------------------------------------------------------------
 # Starship Prompt (disabled in Warp which has its own prompt features)
 # ------------------------------------------------------------------------------
-if [[ -z "$WARP_IS_LOCAL_SHELL_SESSION" ]]; then
+if [[ "$TERM_PROGRAM" != "WarpTerminal" ]]; then
   eval "$(starship init zsh)"
 fi
 
@@ -73,3 +77,7 @@ export PATH="/Users/brandon/.codeium/windsurf/bin:$PATH"
 # Aliases
 # ------------------------------------------------------------------------------
 source ~/.aliases.sh
+export PATH="$HOME/.local/bin:$PATH"
+
+# OpenClaw Completion
+source "/Users/brandon/.openclaw/completions/openclaw.zsh"

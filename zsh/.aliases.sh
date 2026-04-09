@@ -5,15 +5,13 @@ alias vimdiff="nvim -d"
 alias path='tr ':' '\n' <<< "$PATH"'
 alias agi="sudo apt-get install"
 alias ls="eza"
-alias lf="ls -F"
 alias lv="eza -1"
-alias la="eza -a"
 alias lva="eza -1 --all"
-alias lt='eza --tree'
-alias lta='eza --tree --all'
-alias ltg='eza --tree --git'
-alias lti='eza --tree --icons'
-alias ltl='eza --tree --long --git --icons'
+alias ezav="eza -1"
+alias ezaa="eza --all"
+alias ezava="eza -1 --all"
+alias ezatree='eza --tree'
+alias ezatreea='eza --tree --all'
 
 # Edit frequently used files
 alias vimrc="nvim ~/.config/nvim/init.lua"
@@ -23,24 +21,34 @@ alias bashrc="nvim ~/.bashrc"
 alias hosts="sudo nvim /etc/hosts"
 alias aliases="nvim ~/.aliases.sh"
 alias zshrc="nvim ~/.zshrc"
-alias slim="cd ~/dev/prompt-caching/slim-token"
 
 # Go to frequently used directories
 alias up="cd .."
 alias dev="cd ~/dev"
+alias sandbox="cd ~/dev/sandbox"
+alias writing="cd ~/writing"
 alias desk="cd ~/Desktop"
 alias civiqs="cd ~/dev/civiqs/code"
-alias config="cd ~/dev/civiqs/config"
-alias sandbox="cd ~/dev/sandbox"
-alias rap="cd ~/dev/rap-research-lab"
+
+# Apps
 alias dotfiles="cd ~/dotfiles"
 alias snipster="cd ~/dev/snipster"
 alias prep="cd ~/dev/interview-prep"
 alias interview="cd ~/dev/interview-prep"
 alias advent="cd ~/dev/interview-prep/advent-of-code"
 alias breadcrumbs="cd ~/dev/breadcrumbs"
-alias ralf="cd ~/dev/ralf"
+alias tend="cd ~/dev/tend"
+alias alleeoop="cd ~/dev/alleeoop"
+alias song="cd ~/dev/song-space"
+alias harvest="cd ~/dev/harvest-and-spice"
+alias job="cd ~/dev/job-search"
+alias lineage="cd ~/dev/lineage"
 
+# RALF
+alias ralf="cd ~/dev/ralf"
+alias gesture="cd ~/dev/ralf/ralf-gesture-studio"
+alias mediapipe="cd ~/dev/ralf/mediapipe"
+alias sound="cd ~/dev/ralf/sound-engine"
 
 # Remote servers
 alias amazon="ssh bbrown@107.20.254.191"
@@ -60,6 +68,9 @@ alias dstop='docker stop $1'
 alias drm='docker rm $1'
 alias dstopall='docker stop $(docker ps -q)'
 alias dkillf='docker kill $1'
+
+# Project Dashboard
+alias projects="make -C ~/dev/project-dashboard run"
 
 # Claude Code
 alias cc='claude --dangerously-skip-permissions'
