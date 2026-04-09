@@ -1,26 +1,15 @@
 # Frequently used commands
-alias vim="nvim"
-alias nv="nvim"
-alias vimdiff="nvim -d"
-alias path='tr ':' '\n' <<< "$PATH"'
-alias agi="sudo apt-get install"
+alias path='tr ":" "\n" <<< "$PATH"'
 alias ls="eza"
 alias lv="eza -1"
 alias lva="eza -1 --all"
-alias ezav="eza -1"
-alias ezaa="eza --all"
-alias ezava="eza -1 --all"
-alias ezatree='eza --tree'
-alias ezatreea='eza --tree --all'
+alias lt='eza --tree'
+alias lta='eza --tree --all'
 
 # Edit frequently used files
-alias vimrc="nvim ~/.config/nvim/init.lua"
-alias bash_profile="nvim ~/.bash_profile"
-alias profile="nvim ~/.profile"
-alias bashrc="nvim ~/.bashrc"
-alias hosts="sudo nvim /etc/hosts"
-alias aliases="nvim ~/.aliases.sh"
-alias zshrc="nvim ~/.zshrc"
+alias hosts="sudo vim /etc/hosts"
+alias aliases="vim ~/.aliases.sh"
+alias zshrc="vim ~/.zshrc"
 
 # Go to frequently used directories
 alias up="cd .."

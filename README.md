@@ -1,98 +1,48 @@
 # Dotfiles
 
-Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Personal dotfiles managed with [GNU Stow](https://www.gnu.org/software/stow/). One source of truth, symlinked into `$HOME`.
 
-## Quick Start
+## Fresh machine setup
 
-### Fresh Machine Setup
 ```bash
 git clone git@github.com:meninoebom/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./init.sh
-```
-
-### Restart Shell
-```bash
 exec zsh
 ```
 
-### First-Time NeoVim Setup
-```bash
-nvim
-# lazy.nvim auto-installs on first launch
-# Then run :Lazy sync
-```
-
-## New Commands
-
-| Command | What it does |
-|---------|-------------|
-| `z <dir>` | Jump to frequently used directories (learns as you use) |
-| `zi` | Interactive directory picker with fzf |
-| `:Lazy` | In nvim: manage plugins |
-
-## Directory Structure
-
-```
-~/dotfiles/
-├── zsh/        # Zsh config (antidote + Starship + zoxide)
-│   ├── .zshrc
-│   ├── .zsh_plugins.txt
-│   └── .aliases.sh
-├── nvim/       # NeoVim config (lazy.nvim, Lua-based)
-│   └── .config/nvim/
-│       ├── init.lua
-│       └── lua/
-│           ├── config/     # options, keymaps, autocmds
-│           └── plugins/    # plugin specs
-├── git/        # Git config
-│   ├── .gitconfig
-│   └── .gitignore_global
-├── shell/      # Bash/profile configs
-│   ├── .profile
-│   ├── .bash_profile
-│   └── .bashrc
-├── tmux/       # Tmux config
-│   └── .tmux.conf
-├── starship/   # Starship prompt config
-│   └── .config/starship.toml
-└── misc/       # Other dotfiles
-    └── .netrc
-```
-
-## Stow Commands
-
-```bash
-cd ~/dotfiles
-
-# Apply a package (creates symlinks)
-stow -t ~ <package>
-
-# Remove a package (removes symlinks)
-stow -D -t ~ <package>
-
-# Re-stow (fix conflicts after editing)
-stow -R -t ~ <package>
-
-# Apply all packages
-stow -t ~ zsh nvim git shell tmux starship misc
-```
+`init.sh` is idempotent — safe to re-run any time. It installs everything in `Brewfile`, backs up colliding files, and stows every package.
 
 ## Stack
 
-- **Shell**: Zsh + [Antidote](https://getantidote.github.io/) (plugin manager)
+- **Shell**: Zsh + [Antidote](https://getantidote.github.io/) plugin manager
 - **Prompt**: [Starship](https://starship.rs/)
-- **Navigation**: [Zoxide](https://github.com/ajeetdsouza/zoxide) (smarter cd)
-- **Editor**: NeoVim + [lazy.nvim](https://github.com/folke/lazy.nvim)
-- **Dotfiles**: [GNU Stow](https://www.gnu.org/software/stow/)
+- **Navigation**: [Zoxide](https://github.com/ajeetdsouza/zoxide) (`z foo` jumps to frequent dirs)
+- **Search**: [fzf](https://github.com/junegunn/fzf) (`Ctrl+R` history, `Ctrl+T` file picker)
+- **Listing**: [eza](https://eza.rocks/) (`ls` replacement)
+- **Multiplexer**: tmux
+- **Editor**: stock `vim` (ships with macOS)
+- **Dotfiles**: GNU Stow
 
-## If Something Breaks
+## Layout
+
+```
+~/dotfiles/
+├── Brewfile        # Tools required by these dotfiles
+├── init.sh         # Idempotent setup script
+├── zsh/            # .zshrc, .zsh_plugins.txt, .aliases.sh
+├── git/            # .gitconfig, .gitignore_global
+├── tmux/           # .tmux.conf
+├── starship/       # .config/starship.toml
+└── misc/           # .netrc
+```
+
+## Stow cheatsheet
 
 ```bash
-# Remove all stow symlinks
 cd ~/dotfiles
-stow -D -t ~ zsh nvim git shell tmux starship misc
 
-# Restore from backup (if available)
-ls ~/dotfiles_backup_*
+stow -t ~ <package>      # apply (creates symlinks)
+stow -D -t ~ <package>   # remove (deletes symlinks)
+stow -R -t ~ <package>   # restow (idempotent — fixes drift)
 ```
