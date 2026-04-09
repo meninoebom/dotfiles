@@ -5,7 +5,7 @@ command_timeout = 1000
 
 # Single line: directory + git branch, then prompt on new line
 format = """
-$directory$git_branch$git_status
+$python$directory$git_branch$git_status
 $character"""
 
 [directory]
@@ -36,3 +36,8 @@ deleted = "[${count}del](bold red) "
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[>](bold red)"
+vimcmd_symbol = "[<](bold cyan)"
+
+[python]
+format = '([(\($virtualenv\))]($style) )'
+

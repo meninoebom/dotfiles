@@ -82,6 +82,9 @@ return {
     priority = 1000,
     config = function()
       vim.cmd("colorscheme gruvbox")
+      -- Make cursor visible (reverse video so block cursor stands out in Warp)
+      vim.api.nvim_set_hl(0, "CursorLine", { bg = "#3c3836" })
+      vim.opt.cursorline = true
     end,
   },
 }
