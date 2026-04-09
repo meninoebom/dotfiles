@@ -1,70 +1,48 @@
 [user]
 	name = Brandon Brown
 	email = afrobot@gmail.com
+
 [core]
-	excludesfile = /Users/brandon/.gitignore_global
-	editor = cursor --wait
+	excludesfile = ~/.gitignore_global
+	editor = vim
 	autocrlf = false
 	safecrlf = true
 	pager = cat
-[diff]
-    tool = default-difftool
-[difftool "default-difftool"]
-    cmd = code --wait --diff $LOCAL $REMOTE
+
+[push]
+	default = current
+
 [color]
-  	ui = auto
+	ui = auto
 [color "branch"]
-  	current = green reverse
-  	local = yellow
-  	remote = green
+	current = green reverse
+	local = yellow
+	remote = green
 [color "diff"]
-  	meta = yellow bold
-  	frag = magenta bold
-  	old = red bold
-  	new = green bold
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
 [color "status"]
-  	added = yellow
-  	changed = green
-  	untracked = cyan
-[color "hist"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
 [alias]
 	st = status
-[alias]
-	pom = pull origin master
-[alias]
-	submodule-rm = pull origin master
+	co = checkout
+	cm = commit
+	br = branch
+	gl = log --oneline --decorate --graph
+	g  = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
+	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	type = cat-file -t
+	dump = cat-file -p
+	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	clearstage = rm -r --cached
-[alias]
-    ignored = !git ls-files -v | grep "^[[:lower:]]"
-#[remote "stage"]
-#	receivepack = git receive-pack
-#[remote "staging"]
-#	receivepack = git receive-pack
-[merge]
-	tool = diffmerge
-[mergetool "diffmerge"]
-	cmd = /usr/local/bin/diffmerge --merge --result=\"$MERGED\"\"$LOCAL\" \"$BASE\" \"$REMOTE\"
-	trustExitCode = true
-[diff]
-	tool = diffmerge
-[difftool "diffmerge"]
-	cmd = diffmerge $LOCAL $REMOTE
-[alias]
-  co = checkout
-  cm = commit
-  st = status
-  br = branch
-  gl = log --oneline --decorate --graph
-  hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  type = cat-file -t
-  dump = cat-file -p
-	g = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
-[rerere]
-	enabled = false
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[push]
-	default = current

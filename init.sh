@@ -1,57 +1,58 @@
-#!/bin/bash
-# Dotfiles setup script using GNU Stow
+#!/usr/bin/env bash
+# Dotfiles setup — idempotent, safe to re-run.
+#
+# What this does:
+#   1. Installs required tools via Homebrew (or skips if already installed)
+#   2. Backs up any pre-existing dotfiles that would collide
+#   3. Symlinks every package into $HOME using GNU Stow
 
-set -e
+set -euo pipefail
 
-echo "=== Dotfiles Setup ==="
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+PACKAGES=(zsh git tmux starship misc)
 
-# Install required tools
-echo "Installing required tools..."
-brew install stow antidote starship zoxide neovim fzf
+echo "==> Dotfiles setup ($DOTFILES_DIR)"
 
-# Create backup directory
-backup_dir=~/dotfiles_old_$(date +%Y%m%d_%H%M%S)
-echo "Backup directory: $backup_dir"
-mkdir -p "$backup_dir"
+# 1. Install Homebrew if missing, then install everything from Brewfile.
+if ! command -v brew >/dev/null 2>&1; then
+  echo "==> Homebrew not found — install it from https://brew.sh first."
+  exit 1
+fi
 
-# Remove any existing symlinks/files that would conflict
-echo "Cleaning up existing dotfiles..."
-for file in .zshrc .zsh_plugins.txt .aliases.sh .gitconfig .gitignore_global \
-            .profile .bash_profile .bashrc .tmux.conf .netrc; do
-    if [ -e ~/"$file" ] || [ -L ~/"$file" ]; then
-        mv ~/"$file" "$backup_dir/" 2>/dev/null || true
-    fi
+if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
+  echo "==> Installing tools from Brewfile..."
+  brew bundle --file="$DOTFILES_DIR/Brewfile" --no-lock
+fi
+
+# 2. Back up colliding files so Stow can do its thing.
+backup_dir="$HOME/dotfiles_old_$(date +%Y%m%d_%H%M%S)"
+needed_backup=false
+for f in .zshrc .zsh_plugins.txt .aliases.sh .gitconfig .gitignore_global \
+         .tmux.conf .netrc; do
+  if [[ -f "$HOME/$f" && ! -L "$HOME/$f" ]]; then
+    needed_backup=true
+    mkdir -p "$backup_dir"
+    mv "$HOME/$f" "$backup_dir/"
+  fi
+done
+if [[ -f "$HOME/.config/starship.toml" && ! -L "$HOME/.config/starship.toml" ]]; then
+  needed_backup=true
+  mkdir -p "$backup_dir/.config"
+  mv "$HOME/.config/starship.toml" "$backup_dir/.config/"
+fi
+
+if $needed_backup; then
+  echo "==> Backed up colliding files to $backup_dir"
+fi
+
+mkdir -p "$HOME/.config"
+
+# 3. Stow every package. -R is restow: idempotent.
+cd "$DOTFILES_DIR"
+for pkg in "${PACKAGES[@]}"; do
+  echo "==> Stowing $pkg"
+  stow -R -t "$HOME" "$pkg"
 done
 
-# Clean up nvim config
-if [ -e ~/.config/nvim ] || [ -L ~/.config/nvim ]; then
-    mv ~/.config/nvim "$backup_dir/" 2>/dev/null || true
-fi
-
-# Clean up starship config
-if [ -e ~/.config/starship.toml ] || [ -L ~/.config/starship.toml ]; then
-    mv ~/.config/starship.toml "$backup_dir/" 2>/dev/null || true
-fi
-
-# Ensure .config directory exists
-mkdir -p ~/.config
-
-# Apply stow packages
-echo "Applying stow packages..."
-cd ~/dotfiles
-stow -t ~ zsh
-stow -t ~ nvim
-stow -t ~ git
-stow -t ~ shell
-stow -t ~ tmux
-stow -t ~ starship
-stow -t ~ misc
-
 echo ""
-echo "=== Setup Complete ==="
-echo ""
-echo "Next steps:"
-echo "1. Restart your terminal (or run: exec zsh)"
-echo "2. Open nvim and run :Lazy to install plugins"
-echo "3. Test zoxide: z <directory>"
-echo ""
+echo "==> Done. Run 'exec zsh' to reload your shell."
