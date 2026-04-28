@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Launch Claude Code with a live Bitwarden session in-env.
+# The session key is captured into BW_SESSION and never written to disk;
+# it dies with this shell when Claude exits.
+
+set -euo pipefail
+
+if ! command -v bw >/dev/null 2>&1; then
+  echo "claude-bw: bw CLI not found on PATH" >&2
+  exit 1
+fi
+
+status=$(bw status | python3 -c 'import json,sys; print(json.load(sys.stdin)["status"])')
+
+case "$status" in
+  unauthenticated)
+    echo "claude-bw: not logged in. Run 'bw login' first." >&2
+    exit 1
+    ;;
+  locked)
+    echo "claude-bw: unlocking vault..." >&2
+    BW_SESSION="$(bw unlock --raw)"
+    ;;
+  unlocked)
+    # Already unlocked in this shell? Inherit. Otherwise we need a session key.
+    if [[ -z "${BW_SESSION:-}" ]]; then
+      echo "claude-bw: vault is unlocked but no BW_SESSION in env — unlocking for this session." >&2
+      BW_SESSION="$(bw unlock --raw)"
+    fi
+    ;;
+  *)
+    echo "claude-bw: unexpected bw status '$status'" >&2
+    exit 1
+    ;;
+esac
+
+export BW_SESSION
+
+# No explicit lock-on-exit: rely on Bitwarden's built-in vault timeout.
+exec claude "$@"
