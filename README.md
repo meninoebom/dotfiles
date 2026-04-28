@@ -27,9 +27,10 @@ flowchart TD
         TM[tmux/]
         ST[starship/]
         MS[misc/]
+        BN[bin/]
     end
 
-    IS -->|brew bundle| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, tmux)"]
+    IS -->|brew bundle| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, ripgrep,<br/>tmux, glow, navi, chafa)"]
     IS -->|stow| LINKS
 
     subgraph LINKS["$HOME symlinks"]
@@ -40,6 +41,7 @@ flowchart TD
         HT["~/.tmux.conf"]
         HS["~/.config/starship.toml"]
         HN["~/.netrc"]
+        HB["~/.local/bin/claude-bw<br/>~/.local/bin/ports"]
     end
 
     Z -.-> HZ
@@ -48,6 +50,7 @@ flowchart TD
     TM -.-> HT
     ST -.-> HS
     MS -.-> HN
+    BN -.-> HB
 
     LINKS --> SHELL["Interactive zsh session"]
     TOOLS --> SHELL
@@ -65,6 +68,9 @@ flowchart TD
 | Navigation | **[zoxide](https://github.com/ajeetdsouza/zoxide)** | `z <fragment>` jumps to frequent dirs |
 | Search | **[fzf](https://github.com/junegunn/fzf)** | `Ctrl+R` history, `Ctrl+T` file picker, `Alt+C` cd picker |
 | Listing | **[eza](https://eza.rocks/)** | `ls` replacement (aliased as `ls`, `lv`, `lt`, etc.) |
+| Recursive search | **[ripgrep](https://github.com/BurntSushi/ripgrep)** | `rg <pattern>` — fast grep, respects `.gitignore` |
+| Markdown viewer | **[glow](https://github.com/charmbracelet/glow)** | Render markdown beautifully — `glow <file>` |
+| Cheatsheet picker | **[navi](https://github.com/denisidoro/navi)** | Fuzzy-finder over your own command cheatsheets |
 | Multiplexer | **tmux** | Terminal multiplexer, prefix `Ctrl+A` |
 | Editor | **vim** | Homebrew vim for quick edits |
 | Dotfiles | **[stow](https://www.gnu.org/software/stow/)** | Symlink farm from repo → `$HOME` |
@@ -87,9 +93,25 @@ flowchart TD
 │   └── .tmux.conf
 ├── starship/
 │   └── .config/starship.toml
-└── misc/
-    └── .netrc
+├── misc/
+│   └── .netrc
+└── bin/
+    └── .local/bin/        # Custom CLIs symlinked into ~/.local/bin
+        ├── claude-bw      # Launch Claude Code with a live Bitwarden session
+        └── ports          # Port management for macOS (list/pick/kill/sweep)
 ```
+
+## What this repo deliberately does NOT track
+
+These live outside the dotfiles by design. If you set up a new machine, here's what you'll need to handle separately and why:
+
+| Asset | Where it lives | Why not tracked | Recovery |
+|---|---|---|---|
+| `~/zk/` (personal Zettelkasten vault) | Its own git repo | Separate concern — your notes, not your shell config | `git clone <your-zk-remote> ~/zk` then `python3 -m venv ~/zk/.venv && ~/zk/.venv/bin/pip install click pyyaml`, then `ln -s ~/zk/bin/zk ~/.local/bin/zk` |
+| `~/.local/share/navi/cheats/*.cheat` | Loose files in `~/.local/share/` | Cheatsheets are recipes — easy to regenerate from the tools they describe | Copy the directory by `scp` from your old machine, or regenerate by reading each tool's `--help` |
+| `~/zk/.venv/` (Python venv for `zk`) | Inside the zk repo (gitignored) | Venvs are machine-specific binaries | Recreate per the zk recovery row above |
+
+The principle: track what's **expensive to recreate**, skip what's **easy to rebuild from a recipe**.
 
 ## Daily use
 

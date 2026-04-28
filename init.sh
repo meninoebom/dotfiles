@@ -9,7 +9,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-PACKAGES=(zsh git tmux starship misc)
+PACKAGES=(zsh git tmux starship misc bin)
 
 echo "==> Dotfiles setup ($DOTFILES_DIR)"
 
@@ -45,7 +45,7 @@ if $needed_backup; then
   echo "==> Backed up colliding files to $backup_dir"
 fi
 
-mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.config" "$HOME/.local/bin"
 
 # 3. Stow every package. -R is restow: idempotent.
 cd "$DOTFILES_DIR"

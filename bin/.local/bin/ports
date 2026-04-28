@@ -1,0 +1,354 @@
+#!/bin/bash
+# ports - Simple port management CLI for macOS
+
+set -e
+
+# Collect port data into parallel arrays (avoids subshell scoping issues with pipes)
+collect_ports() {
+    PORTS=()
+    PIDS=()
+    PROCS=()
+    START_TIMES=()
+    CMDS=()
+
+    local output
+    output=$(lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | \
+        awk 'NR>1 {split($9,a,":"); print a[length(a)], $2, $1}' | \
+        sort -n -k1 | uniq)
+
+    if [ -z "$output" ]; then
+        return 1
+    fi
+
+    while read -r port pid process; do
+        local start_time cmd
+        start_time=$(ps -p "$pid" -o lstart= 2>/dev/null | awk '{print $2, $3, $4}' || echo "unknown")
+        cmd=$(ps -p "$pid" -o args= 2>/dev/null || echo "unknown")
+        PORTS+=("$port")
+        PIDS+=("$pid")
+        PROCS+=("$process")
+        START_TIMES+=("$start_time")
+        CMDS+=("$cmd")
+    done <<< "$output"
+}
+
+print_port_list() {
+    local prefix="${1:-     }"
+    printf "${prefix}%-8s %-8s %-15s %-20s %s\n" "PORT" "PID" "STARTED" "PROCESS" "COMMAND"
+    printf "${prefix}%-8s %-8s %-15s %-20s %s\n" "----" "---" "-------" "-------" "-------"
+    for i in "${!PORTS[@]}"; do
+        local num=$((i + 1))
+        local cmd_truncated="${CMDS[$i]}"
+        if [ ${#cmd_truncated} -gt 60 ]; then
+            cmd_truncated="${cmd_truncated:0:57}..."
+        fi
+        printf " [%d] %-8s %-8s %-15s %-20s %s\n" "$num" "${PORTS[$i]}" "${PIDS[$i]}" "${START_TIMES[$i]}" "${PROCS[$i]}" "$cmd_truncated"
+    done
+}
+
+list_ports() {
+    if ! collect_ports; then
+        echo "No listening ports found."
+        return
+    fi
+
+    printf "%-8s %-8s %-15s %-20s %s\n" "PORT" "PID" "STARTED" "PROCESS" "COMMAND"
+    printf "%-8s %-8s %-15s %-20s %s\n" "----" "---" "-------" "-------" "-------"
+    for i in "${!PORTS[@]}"; do
+        local cmd_truncated="${CMDS[$i]}"
+        if [ ${#cmd_truncated} -gt 60 ]; then
+            cmd_truncated="${cmd_truncated:0:57}..."
+        fi
+        printf "%-8s %-8s %-15s %-20s %s\n" "${PORTS[$i]}" "${PIDS[$i]}" "${START_TIMES[$i]}" "${PROCS[$i]}" "$cmd_truncated"
+    done
+}
+
+show_process_info() {
+    local pid=$1
+
+    if ! [[ "$pid" =~ ^[0-9]+$ ]]; then
+        echo "Error: '$pid' is not a valid process ID"
+        exit 1
+    fi
+
+    if ! ps -p "$pid" > /dev/null 2>&1; then
+        echo "Error: Process $pid not found"
+        exit 1
+    fi
+
+    local port process start_time cmd
+
+    port=$(lsof -ti:"$pid" 2>/dev/null | grep -F "$pid" | awk '{split($9,a,":"); print a[length(a)]}' | head -1)
+    port=${port:-"N/A"}
+
+    process=$(ps -p "$pid" -o comm= 2>/dev/null)
+    start_time=$(ps -p "$pid" -o lstart= 2>/dev/null)
+    cmd=$(ps -p "$pid" -o args= 2>/dev/null)
+
+    echo "Process Details for PID $pid:"
+    echo "  Port:       $port"
+    echo "  Process:    $process"
+    echo "  Started:    $start_time"
+    echo "  Command:    $cmd"
+}
+
+# Graceful kill with educational output.
+# Shows the user exactly what commands are being run and why.
+graceful_kill() {
+    local pid=$1
+    local process=$2
+    local port=$3
+
+    echo ""
+    echo "┌─ What's happening ──────────────────────────────────"
+    echo "│"
+    echo "│ Step 1: Graceful shutdown (SIGTERM / signal 15)"
+    echo "│   → kill -15 $pid"
+    echo "│"
+    echo "│   SIGTERM asks the process to shut down cleanly."
+    echo "│   A well-written server will close connections,"
+    echo "│   flush writes, and exit. Most processes respect this."
+    echo "│"
+    echo "│ Step 2: If still alive after 3s, force kill (SIGKILL / signal 9)"
+    echo "│   → kill -9 $pid"
+    echo "│"
+    echo "│   SIGKILL is handled by the OS kernel, not the process."
+    echo "│   It cannot be caught, blocked, or ignored."
+    echo "│   The process gets no chance to clean up."
+    echo "│"
+    echo "└──────────────────────────────────────────────────────"
+    echo ""
+
+    echo "Sending SIGTERM to $process (PID $pid)..."
+    kill -15 "$pid" 2>/dev/null
+
+    for i in 1 2 3; do
+        if ! ps -p "$pid" > /dev/null 2>&1; then
+            echo "✓ Process exited gracefully after ${i}s (SIGTERM)"
+            return
+        fi
+        printf "  waiting... %ds\n" "$i"
+        sleep 1
+    done
+
+    echo "Process still alive — sending SIGKILL..."
+    kill -9 "$pid" 2>/dev/null
+    sleep 0.5
+
+    if ! ps -p "$pid" > /dev/null 2>&1; then
+        echo "✓ Process killed (SIGKILL)"
+    else
+        echo "✗ Failed to kill process $pid"
+        exit 1
+    fi
+}
+
+kill_port() {
+    local port=$1
+    local force=$2
+
+    if ! [[ "$port" =~ ^[0-9]+$ ]]; then
+        echo "Error: '$port' is not a valid port number"
+        exit 1
+    fi
+
+    local pids
+    pids=$(lsof -ti:"$port" 2>/dev/null || true)
+
+    if [ -z "$pids" ]; then
+        echo "No process found on port $port"
+        exit 1
+    fi
+
+    local pid
+    pid=$(echo "$pids" | head -1)
+    local process
+    process=$(ps -p "$pid" -o comm= 2>/dev/null || echo "unknown")
+
+    if [ "$force" != "-f" ]; then
+        printf "Kill %s (PID %s) on port %s? [y/N] " "$process" "$pid" "$port"
+        read -r confirm
+        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+            echo "Aborted."
+            exit 0
+        fi
+    fi
+
+    graceful_kill "$pid" "$process" "$port"
+}
+
+interactive_kill() {
+    while true; do
+        if ! collect_ports; then
+            echo "No listening ports remaining."
+            return
+        fi
+
+        local count=${#PORTS[@]}
+
+        print_port_list
+
+        echo ""
+        printf "Enter row number to kill (or q to quit): "
+        read -r choice
+
+        if [[ "$choice" == "q" || "$choice" == "Q" || -z "$choice" ]]; then
+            echo "Bye."
+            return
+        fi
+
+        if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "$count" ]; then
+            echo "Invalid selection: $choice"
+            continue
+        fi
+
+        local idx=$((choice - 1))
+        local sel_port="${PORTS[$idx]}"
+        local sel_pid="${PIDS[$idx]}"
+        local sel_proc="${PROCS[$idx]}"
+        local sel_start="${START_TIMES[$idx]}"
+        local sel_cmd="${CMDS[$idx]}"
+
+        echo ""
+        echo "Selected: $sel_proc (PID $sel_pid) on port $sel_port"
+        echo "Started:  $sel_start"
+        echo "Command:  $sel_cmd"
+
+        printf "\nProceed with kill? [Y/n] "
+        read -r confirm
+        if [[ "$confirm" =~ ^[Nn]$ ]]; then
+            echo "Skipped."
+        else
+            graceful_kill "$sel_pid" "$sel_proc" "$sel_port"
+        fi
+
+        echo ""
+    done
+}
+
+interactive_sweep() {
+    if ! command -v gum &>/dev/null; then
+        echo "Error: 'gum' is required for sweep mode. Install with: brew install gum"
+        exit 1
+    fi
+
+    while true; do
+        if ! collect_ports; then
+            echo "No listening ports remaining."
+            return
+        fi
+
+        # Build options for gum choose
+        local options=()
+        for i in "${!PORTS[@]}"; do
+            local cmd_truncated="${CMDS[$i]}"
+            if [ ${#cmd_truncated} -gt 50 ]; then
+                cmd_truncated="${cmd_truncated:0:47}..."
+            fi
+            options+=("$(printf "%-8s %-8s %-15s %-20s %s" "${PORTS[$i]}" "${PIDS[$i]}" "${START_TIMES[$i]}" "${PROCS[$i]}" "$cmd_truncated")")
+        done
+
+        echo ""
+        printf "%-8s %-8s %-15s %-20s %s\n" "PORT" "PID" "STARTED" "PROCESS" "COMMAND"
+        printf "%-8s %-8s %-15s %-20s %s\n" "----" "---" "-------" "-------" "-------"
+
+        local choices
+        choices=$(gum choose --no-limit --header="arrow keys to move, space to select, enter to confirm" "${options[@]}") || {
+            echo "Bye."
+            return
+        }
+
+        if [ -z "$choices" ]; then
+            echo "Nothing selected."
+            continue
+        fi
+
+        # Extract PIDs from selected lines
+        local sel_pids=()
+        local sel_procs=()
+        local sel_ports=()
+        while IFS= read -r line; do
+            local pid proc port
+            pid=$(echo "$line" | awk '{print $2}')
+            port=$(echo "$line" | awk '{print $1}')
+            proc=$(echo "$line" | awk '{print $4}')
+            sel_pids+=("$pid")
+            sel_procs+=("$proc")
+            sel_ports+=("$port")
+        done <<< "$choices"
+
+        echo ""
+        echo "About to kill ${#sel_pids[@]} process(es):"
+        for i in "${!sel_pids[@]}"; do
+            echo "  - ${sel_procs[$i]} (PID ${sel_pids[$i]}) on port ${sel_ports[$i]}"
+        done
+        printf "\nProceed? [Y/n] "
+        read -r confirm
+        if [[ "$confirm" =~ ^[Nn]$ ]]; then
+            echo "Aborted."
+            continue
+        fi
+
+        for i in "${!sel_pids[@]}"; do
+            graceful_kill "${sel_pids[$i]}" "${sel_procs[$i]}" "${sel_ports[$i]}"
+        done
+
+        echo ""
+    done
+}
+
+show_help() {
+    cat <<EOF
+ports - Simple port management for macOS
+
+Usage:
+    ports              List all listening TCP ports
+    ports list         Same as above
+    ports pick         Interactive mode — pick a port to kill (loops)
+    ports -i           Same as pick
+    ports sweep        Multi-select mode — check off processes, kill in batch
+    ports -s           Same as sweep
+    ports info <pid>   Show full details for a process
+    ports kill <port>  Kill process on port (graceful, then force)
+    ports kill <port> -f  Force kill without confirmation
+    ports help         Show this help
+
+Signals explained:
+    SIGTERM (15)  Polite request to exit. Process can clean up.
+    SIGKILL (9)   Kernel terminates immediately. No cleanup possible.
+EOF
+}
+
+case "${1:-list}" in
+    list)
+        list_ports
+        ;;
+    pick|-i)
+        interactive_kill
+        ;;
+    sweep|-s)
+        interactive_sweep
+        ;;
+    info)
+        if [ -z "$2" ]; then
+            echo "Usage: ports info <pid>"
+            exit 1
+        fi
+        show_process_info "$2"
+        ;;
+    kill)
+        if [ -z "$2" ]; then
+            echo "Usage: ports kill <port> [-f]"
+            exit 1
+        fi
+        kill_port "$2" "$3"
+        ;;
+    help|--help|-h)
+        show_help
+        ;;
+    *)
+        echo "Unknown command: $1"
+        show_help
+        exit 1
+        ;;
+esac
