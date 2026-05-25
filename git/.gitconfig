@@ -12,6 +12,9 @@
 [push]
 	default = current
 
+[rerere]
+	enabled = true
+
 [color]
 	ui = auto
 [color "branch"]
@@ -40,6 +43,7 @@
 	dump = cat-file -p
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	clearstage = rm -r --cached
+	brs = branch --sort=committerdate
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

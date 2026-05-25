@@ -8,9 +8,6 @@ setopt AUTO_CD              # Type directory name to cd into it
 setopt CORRECT              # Suggest corrections for typos
 bindkey -v                  # Vi keybindings
 
-# Load Civiqs shell config (if exists)
-[[ -f "${HOME}/.civiqs/etc/zshrc" ]] && source "${HOME}/.civiqs/etc/zshrc"
-
 # ------------------------------------------------------------------------------
 # Antidote Plugin Manager
 # ------------------------------------------------------------------------------
@@ -82,3 +79,16 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # OpenClaw Completion
 source "/Users/brandon/.openclaw/completions/openclaw.zsh"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
+
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
+
+# pnpm
+export PNPM_HOME="/Users/brandon/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
