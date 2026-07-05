@@ -13,6 +13,13 @@ bindkey -v                  # Vi keybindings
 # ------------------------------------------------------------------------------
 source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
 
+# Initialize completion system before loading plugins.
+# Antidote does NOT run compinit for us, and oh-my-zsh plugins (e.g. git)
+# call `compdef` at load time, which only exists after compinit has run.
+# -C skips the security check on the dump for faster startup; -d picks a cache path.
+autoload -Uz compinit
+compinit -C
+
 # Generate static plugin file for performance
 zsh_plugins=${ZDOTDIR:-$HOME}/.zsh_plugins
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then

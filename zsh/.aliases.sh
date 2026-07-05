@@ -14,6 +14,7 @@ alias zshrc="vim ~/.zshrc"
 # Go to frequently used directories
 alias up="cd .."
 alias dev="cd ~/dev"
+alias projects="cd ~/projects"
 alias sandbox="cd ~/dev/sandbox"
 alias writing="cd ~/writing"
 alias desk="cd ~/Desktop"
@@ -21,7 +22,6 @@ alias civiqs="cd ~/dev/civiqs/code"
 
 # Apps
 alias dotfiles="cd ~/dotfiles"
-alias snipster="cd ~/dev/snipster"
 alias prep="cd ~/dev/interview-prep"
 alias interview="cd ~/dev/interview-prep"
 alias advent="cd ~/dev/interview-prep/advent-of-code"
@@ -59,7 +59,7 @@ alias dstopall='docker stop $(docker ps -q)'
 alias dkillf='docker kill $1'
 
 # Project Dashboard
-alias projects="make -C ~/dev/project-dashboard run"
+alias dashboard="make -C ~/dev/project-dashboard run"
 
 # Claude Code
 alias cc='claude --dangerously-skip-permissions'
