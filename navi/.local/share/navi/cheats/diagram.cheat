@@ -1,0 +1,10 @@
+% diagram, mermaid, markdown
+
+# diagram: render the first mermaid block in ./README.md inline in the terminal
+diagram
+
+# diagram: render the first mermaid block in a specific markdown file
+diagram <file>
+
+# diagram: render mermaid in a docs file
+diagram docs/<file>.md

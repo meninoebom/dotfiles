@@ -1,0 +1,49 @@
+% glow, markdown, render, viewer
+
+# glow: render a markdown file with default style
+glow <file>
+
+# glow: render a file in a pager (Page Up/Down to scroll, q to quit)
+glow -p <file>
+
+# glow: open the TUI to browse markdown files in current directory
+glow
+
+# glow: open the TUI in a specific directory
+glow <directory>
+
+# glow: TUI showing dotfiles too
+glow -a
+
+# glow: TUI with line numbers
+glow -l
+
+# glow: render with the dark style
+glow -s dark <file>
+
+# glow: render with the light style
+glow -s light <file>
+
+# glow: render with a custom width (word-wrap)
+glow -w <width> <file>
+
+# glow: preserve newlines in output (good for poetry / strict layouts)
+glow -n <file>
+
+# glow: render a remote markdown file via URL
+glow <url>
+
+# glow: render a github repo's README (owner/repo shorthand)
+glow github.com/<owner>/<repo>
+
+# glow: edit the glow config file
+glow config
+
+# glow: pipe markdown from another command into glow
+<command> | glow -
+
+# glow + zk: render today's session in pager
+glow -p ~/zk/sessions/<citekey>-$(date +%Y-%m-%d).md
+
+# glow + zk: browse all atomic notes in TUI
+glow ~/zk/notes

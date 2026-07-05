@@ -1,0 +1,100 @@
+% shortcuts, aliases, navigation, git, docker
+
+# nav: jump to ~/dev
+dev
+
+# nav: jump to ~/dev/sandbox
+sandbox
+
+# nav: jump to ~/dotfiles
+dotfiles
+
+# nav: jump to ~/writing
+writing
+
+# nav: jump to ~/Desktop
+desk
+
+# nav: project — civiqs codebase
+civiqs
+
+# nav: project — breadcrumbs
+breadcrumbs
+
+# nav: project — tend
+tend
+
+# nav: project — alleeoop
+alleeoop
+
+# nav: project — ralf root
+ralf
+
+# nav: project — ralf gesture studio
+gesture
+
+# nav: project — ralf mediapipe
+mediapipe
+
+# nav: project — ralf sound engine
+sound
+
+# nav: project — song-space
+song
+
+# nav: project — harvest-and-spice
+harvest
+
+# nav: project — lineage
+lineage
+
+# nav: project — interview prep / advent of code
+prep
+
+# nav: project — snipster
+snipster
+
+# nav: project — job-search
+job
+
+# edit: open ~/.aliases.sh in vim
+aliases
+
+# edit: open ~/.zshrc in vim
+zshrc
+
+# edit: edit /etc/hosts (sudo)
+hosts
+
+# ls: list files (eza)
+ls
+
+# ls: one-per-line
+lv
+
+# ls: one-per-line including dotfiles
+lva
+
+# ls: tree view
+lt
+
+# ls: tree view including dotfiles
+lta
+
+# git: pretty graphical log with branches and authors
+ghist
+
+# git: pull all submodules
+git-pull-submodules
+
+# docker: list running containers in a clean table
+dps
+
+# docker: list images in a clean table
+images
+
+# docker: stop all running containers
+dstopall
+
+# path: show $PATH one entry per line
+path

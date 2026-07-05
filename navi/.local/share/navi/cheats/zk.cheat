@@ -1,0 +1,60 @@
+% zk, notes, zettelkasten
+
+# zk: capture a fleeting thought to today's inbox
+zk capture "<thought>"
+
+# zk: list all sources (books, papers, podcasts)
+zk sources
+
+# zk: search sources by citekey, title, or author
+zk sources <query>
+
+# zk: add a new source (interactive prompts)
+zk new source
+
+# zk: drop a quote into today's session from clipboard (recommended)
+zk quote <citekey> --paste -p <page>
+
+# zk: drop a quote inline (short clean text only)
+zk quote <citekey> "<text>" -p <page>
+
+# zk: drop a quote piped from another command
+pbpaste | zk quote <citekey> -p <page>
+
+# zk: add a reaction to today's session
+zk react <citekey> "<text>"
+
+# zk: add a reaction from clipboard
+zk react <citekey> --paste
+
+# zk: add an open question to today's session
+zk ask <citekey> "<text>"
+
+# zk: create a new atomic note (then edit the file)
+zk new note "<title>"
+
+# zk: create a new draft (essay, wiki entry, etc.)
+zk new draft "<title>"
+
+# zk: create today's session manually (usually unnecessary — quote/react/ask auto-create)
+zk new session <citekey>
+
+# zk: list atomic notes nothing links to
+zk orphans
+
+# zk: list tags by usage count
+zk tags
+
+# zk: list tags used in <2 notes (review and prune)
+zk tags --rare
+
+# zk: open the whole vault in Obsidian (optional viewer)
+open -a Obsidian ~/zk
+
+# zk: full-text search the corpus
+rg "<pattern>" ~/zk
+
+# zk: open today's session in your editor
+$EDITOR ~/zk/sessions/<citekey>-$(date +%Y-%m-%d).md
+
+$ citekey: zk sources --- --column 1

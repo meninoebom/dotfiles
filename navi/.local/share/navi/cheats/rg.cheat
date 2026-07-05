@@ -1,0 +1,73 @@
+% rg, ripgrep, search, grep
+
+# rg: search for a pattern recursively from current directory
+rg "<pattern>"
+
+# rg: search a specific path
+rg "<pattern>" <path>
+
+# rg: list only filenames that contain a match (no content)
+rg -l "<pattern>" <path>
+
+# rg: count matches per file
+rg -c "<pattern>" <path>
+
+# rg: case-insensitive search
+rg -i "<pattern>" <path>
+
+# rg: match whole words only
+rg -w "<word>" <path>
+
+# rg: show 3 lines of context around each match (before and after)
+rg -C 3 "<pattern>" <path>
+
+# rg: show 3 lines AFTER each match
+rg -A 3 "<pattern>" <path>
+
+# rg: show 3 lines BEFORE each match
+rg -B 3 "<pattern>" <path>
+
+# rg: only search markdown files
+rg -t md "<pattern>" <path>
+
+# rg: only search files matching a glob
+rg -g "<glob>" "<pattern>" <path>
+
+# rg: include hidden files (dotfiles)
+rg --hidden "<pattern>" <path>
+
+# rg: ignore .gitignore — search everything
+rg --no-ignore "<pattern>" <path>
+
+# rg: invert — show lines that do NOT match
+rg -v "<pattern>" <file>
+
+# rg: regex with capture groups, replace in output (preview only, doesn't edit)
+rg "<pattern>" --replace "<replacement>"
+
+# rg: find files by name pattern (no content search)
+rg --files <path> | rg "<filename-pattern>"
+
+# rg: search for pattern in only filenames (file paths)
+rg --files-with-matches "<pattern>" <path>
+
+# rg + zk: find every occurrence of a concept across the vault
+rg "<pattern>" ~/zk
+
+# rg + zk: list which notes mention a topic
+rg -l "<pattern>" ~/zk/notes
+
+# rg + zk: find all open questions across all sessions
+rg "^\?" ~/zk/sessions
+
+# rg + zk: find all page-number citations
+rg "p\. \d+" ~/zk/sessions
+
+# rg + zk: find every note referencing a specific source
+rg "<citekey>" ~/zk/notes -l
+
+# rg + zk: find all wikilinks to a specific note
+rg "\[\[<note-id>" ~/zk
+
+# rg + zk: list every tag used (extract from frontmatter)
+rg "^tags:" ~/zk -A 10 | rg "^\s*-\s+\w" | sort -u

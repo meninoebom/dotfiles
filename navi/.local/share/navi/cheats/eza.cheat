@@ -1,0 +1,67 @@
+% eza, ls, files, listing
+
+# eza: list files (your `ls` alias points here)
+eza
+
+# eza: long format with permissions, size, date
+eza -l
+
+# eza: long format with human-readable sizes
+eza -lh
+
+# eza: include hidden files (dotfiles)
+eza -la
+
+# eza: long, all files, human sizes
+eza -lah
+
+# eza: one entry per line (your `lv` alias)
+eza -1
+
+# eza: tree view (your `lt` alias)
+eza --tree
+
+# eza: tree limited to N levels deep
+eza --tree --level=<n>
+
+# eza: tree, only directories
+eza --tree -D
+
+# eza: tree, ignore .gitignore'd files
+eza --tree --git-ignore
+
+# eza: long with git status column (M, ?, !, etc.)
+eza -l --git
+
+# eza: long with git status, no group, with icons
+eza -l --git --no-user --icons
+
+# eza: show icons (Nerd Font required)
+eza --icons
+
+# eza: sort by file size (largest first)
+eza -lh --sort=size --reverse
+
+# eza: sort by modification time (newest first)
+eza -lh --sort=modified --reverse
+
+# eza: sort by extension
+eza -l --sort=extension
+
+# eza: only directories
+eza -D
+
+# eza: only files (no directories)
+eza -f
+
+# eza: show file/dir size totals for directories
+eza -l --total-size
+
+# eza: filter by glob — only matching entries
+eza | rg "<pattern>"
+
+# eza + zk: tree of the vault, 2 levels deep
+eza --tree --level=2 ~/zk
+
+# eza + zk: list sources sorted by date modified
+eza -lh --sort=modified --reverse ~/zk/sources

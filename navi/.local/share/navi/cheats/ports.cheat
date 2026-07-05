@@ -1,0 +1,25 @@
+% ports, network, kill
+
+# ports: list all listening TCP ports
+ports
+
+# ports: same as above (explicit)
+ports list
+
+# ports: interactive mode — pick a port to kill (loops)
+ports pick
+
+# ports: multi-select mode — check off multiple processes and kill in one batch
+ports sweep
+
+# ports: show full process details for a PID
+ports info <pid>
+
+# ports: kill the process on a specific port (graceful SIGTERM, then SIGKILL)
+ports kill <port>
+
+# ports: force-kill without confirmation (SIGKILL only)
+ports kill <port> -f
+
+# ports: show help
+ports help

@@ -1,0 +1,19 @@
+% claude-bw, claude, bitwarden, bw
+
+# claude-bw: launch Claude Code with a live Bitwarden session in env
+claude-bw
+
+# claude-bw: launch Claude Code in a specific directory
+claude-bw <directory>
+
+# bw: check Bitwarden vault status
+bw status
+
+# bw: log in to Bitwarden (one-time)
+bw login
+
+# bw: unlock vault and capture session key into env
+export BW_SESSION="$(bw unlock --raw)"
+
+# bw: lock vault (also happens on shell exit)
+bw lock

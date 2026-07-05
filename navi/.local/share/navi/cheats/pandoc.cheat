@@ -1,0 +1,40 @@
+% pandoc, convert, document, markdown, docx, pdf
+
+# pandoc: markdown to docx
+pandoc <input> -o <output>.docx
+
+# pandoc: markdown to docx using a reference template (inherits styles/fonts/margins)
+pandoc <input> --reference-doc=<template>.docx -o <output>.docx
+
+# pandoc: generate a reference docx you can edit to set default styling
+pandoc -o custom-reference.docx --print-default-data-file=reference.docx
+
+# pandoc: markdown to PDF (requires LaTeX engine, e.g. tectonic or xelatex)
+pandoc <input> -o <output>.pdf
+
+# pandoc: markdown to PDF with xelatex (better unicode/font support)
+pandoc <input> --pdf-engine=xelatex -o <output>.pdf
+
+# pandoc: markdown to standalone HTML
+pandoc <input> -s -o <output>.html
+
+# pandoc: docx to markdown
+pandoc <input>.docx -o <output>.md
+
+# pandoc: docx to markdown, extracting embedded media to a folder
+pandoc <input>.docx --extract-media=./media -o <output>.md
+
+# pandoc: HTML to markdown
+pandoc <input>.html -f html -t markdown -o <output>.md
+
+# pandoc: markdown to EPUB
+pandoc <input> -o <output>.epub
+
+# pandoc: list available output formats
+pandoc --list-output-formats
+
+# pandoc: list available input formats
+pandoc --list-input-formats
+
+# pandoc: cover letter — quick markdown to docx on Desktop
+pandoc <input>.md -o ~/Desktop/<name>.docx
