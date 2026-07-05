@@ -7,9 +7,9 @@ alias lt='eza --tree'
 alias lta='eza --tree --all'
 
 # Edit frequently used files
-alias hosts="sudo vim /etc/hosts"
-alias aliases="vim ~/.aliases.sh"
-alias zshrc="vim ~/.zshrc"
+alias hosts="sudo nvim /etc/hosts"
+alias aliases="nvim ~/.aliases.sh"
+alias zshrc="nvim ~/.zshrc"
 
 # Go to frequently used directories
 alias up="cd .."
