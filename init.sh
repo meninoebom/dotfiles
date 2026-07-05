@@ -9,7 +9,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-PACKAGES=(zsh git tmux starship misc bin)
+PACKAGES=(zsh git tmux starship misc bin navi nvim)
 
 echo "==> Dotfiles setup ($DOTFILES_DIR)"
 
