@@ -9,7 +9,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-PACKAGES=(zsh git tmux starship misc bin navi nvim)
+PACKAGES=(zsh git tmux starship misc bin navi nvim ghostty)
 
 echo "==> Dotfiles setup ($DOTFILES_DIR)"
 
@@ -21,7 +21,7 @@ fi
 
 if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
   echo "==> Installing tools from Brewfile..."
-  brew bundle --file="$DOTFILES_DIR/Brewfile" --no-lock
+  brew bundle install --file="$DOTFILES_DIR/Brewfile"
 fi
 
 # 2. Back up colliding files so Stow can do its thing.

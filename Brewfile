@@ -21,6 +21,9 @@ brew "navi"        # cheatsheet picker; cheats live in ~/.local/share/navi/cheat
 # Editor + multiplexer
 brew "tmux"
 
+# Terminal
+cask "ghostty"
+
 # Diagram rendering (for the `diagram` zsh function).
 # Uses mermaid.ink (web service) so no chromium dependency needed.
 brew "chafa"         # inline image viewer for any terminal

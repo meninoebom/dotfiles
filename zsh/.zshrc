@@ -28,9 +28,12 @@ fi
 source ${zsh_plugins}.zsh
 
 # ------------------------------------------------------------------------------
-# Starship Prompt (disabled in Warp which has its own prompt features)
+# Starship Prompt (disabled in Warp which has its own prompt features).
+# herdr panes inherit TERM_PROGRAM from the server's launch env, which may be
+# WarpTerminal even when viewed through another terminal — so honor the Warp
+# opt-out only when NOT inside a herdr pane ($HERDR_ENV=1 is set in every pane).
 # ------------------------------------------------------------------------------
-if [[ "$TERM_PROGRAM" != "WarpTerminal" ]]; then
+if [[ "$TERM_PROGRAM" != "WarpTerminal" || -n "$HERDR_ENV" ]]; then
   eval "$(starship init zsh)"
 fi
 
@@ -99,3 +102,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+# >>> blaze >>>
+source /Users/brandon/.blaze/blaze.zsh
+# <<< blaze <<<

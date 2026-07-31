@@ -22,13 +22,13 @@ alias civiqs="cd ~/dev/civiqs/code"
 
 # Apps
 alias dotfiles="cd ~/dotfiles"
+alias courtdocs="cd ~/dev/courtdocs"
 alias prep="cd ~/dev/interview-prep"
 alias interview="cd ~/dev/interview-prep"
 alias advent="cd ~/dev/interview-prep/advent-of-code"
 alias breadcrumbs="cd ~/dev/breadcrumbs"
 alias tend="cd ~/dev/tend"
 alias alleeoop="cd ~/dev/alleeoop"
-alias song="cd ~/dev/song-space"
 alias harvest="cd ~/dev/harvest-and-spice"
 alias job="cd ~/dev/job-search"
 alias lineage="cd ~/dev/lineage"
@@ -38,6 +38,8 @@ alias ralf="cd ~/dev/ralf"
 alias gesture="cd ~/dev/ralf/ralf-gesture-studio"
 alias mediapipe="cd ~/dev/ralf/mediapipe"
 alias sound="cd ~/dev/ralf/sound-engine"
+alias song="cd ~/dev/song-space"
+alias blender="cd ~/dev/blender"
 
 # Remote servers
 alias amazon="ssh bbrown@107.20.254.191"

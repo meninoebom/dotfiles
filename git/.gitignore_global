@@ -3,3 +3,5 @@
 
 # VS Code workspace files
 *.code-workspace
+
+**/.claude/settings.local.json
