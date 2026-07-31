@@ -19,7 +19,9 @@ brew "glow"        # render markdown beautifully in the terminal
 brew "navi"        # cheatsheet picker; cheats live in ~/.local/share/navi/cheats/
 
 # Editor + multiplexer
+brew "neovim"      # `nvim`; the nvim/ stow package and the zshrc/aliases shortcuts need it
 brew "tmux"
+brew "herdr"       # agent multiplexer; cheatsheet lives in navi/…/herdr.cheat
 
 # Terminal
 cask "ghostty"
