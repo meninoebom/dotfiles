@@ -20,6 +20,7 @@ brew "navi"        # cheatsheet picker; cheats live in ~/.local/share/navi/cheat
 
 # Editor + multiplexer
 brew "neovim"      # `nvim`; the nvim/ stow package and the zshrc/aliases shortcuts need it
+brew "tree-sitter-cli"  # required by nvim-treesitter's `main` branch to build parsers
 brew "tmux"
 brew "herdr"       # agent multiplexer; cheatsheet lives in navi/…/herdr.cheat
 

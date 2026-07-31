@@ -28,9 +28,12 @@ flowchart TD
         ST[starship/]
         MS[misc/]
         BN[bin/]
+        NV[navi/]
+        NE[nvim/]
+        GH[ghostty/]
     end
 
-    IS -->|brew bundle| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, ripgrep,<br/>tmux, glow, navi, chafa)"]
+    IS -->|brew bundle install| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, ripgrep,<br/>tmux, herdr, glow, navi,<br/>neovim, tree-sitter-cli,<br/>chafa, ghostty)"]
     IS -->|stow| LINKS
 
     subgraph LINKS["$HOME symlinks"]
@@ -42,6 +45,9 @@ flowchart TD
         HS["~/.config/starship.toml"]
         HN["~/.netrc"]
         HB["~/.local/bin/claude-bw<br/>~/.local/bin/ports"]
+        HC["~/.local/share/navi/cheats/"]
+        HV["~/.config/nvim/"]
+        HGH["~/.config/ghostty/config"]
     end
 
     Z -.-> HZ
@@ -51,6 +57,9 @@ flowchart TD
     ST -.-> HS
     MS -.-> HN
     BN -.-> HB
+    NV -.-> HC
+    NE -.-> HV
+    GH -.-> HGH
 
     LINKS --> SHELL["Interactive zsh session"]
     TOOLS --> SHELL
@@ -72,7 +81,9 @@ flowchart TD
 | Markdown viewer | **[glow](https://github.com/charmbracelet/glow)** | Render markdown beautifully — `glow <file>` |
 | Cheatsheet picker | **[navi](https://github.com/denisidoro/navi)** | Fuzzy-finder over your own command cheatsheets |
 | Multiplexer | **tmux** | Terminal multiplexer, prefix `Ctrl+A` |
-| Editor | **vim** | Homebrew vim for quick edits |
+| Agent multiplexer | **[herdr](https://herdr.dev)** | Persistent panes/workspaces for agents; cheatsheet in `navi/` |
+| Terminal | **[ghostty](https://ghostty.org/)** | GPU-accelerated terminal; config in `ghostty/` |
+| Editor | **[neovim](https://neovim.io/)** | `nvim`; config in `nvim/`, needs `tree-sitter-cli` |
 | Dotfiles | **[stow](https://www.gnu.org/software/stow/)** | Symlink farm from repo → `$HOME` |
 
 ## Layout
@@ -95,11 +106,23 @@ flowchart TD
 │   └── .config/starship.toml
 ├── misc/
 │   └── .netrc
+├── navi/
+│   └── .local/share/navi/cheats/   # Command cheatsheets (herdr, etc.)
+├── nvim/
+│   └── .config/nvim/
+│       ├── init.lua       # Single-file config; treesitter on the `main` branch
+│       └── lazy-lock.json # Pinned plugin revisions
+├── ghostty/
+│   └── .config/ghostty/config
 └── bin/
     └── .local/bin/        # Custom CLIs symlinked into ~/.local/bin
         ├── claude-bw      # Launch Claude Code with a live Bitwarden session
         └── ports          # Port management for macOS (list/pick/kill/sweep)
 ```
+
+The `PACKAGES` array in `init.sh` is the authoritative list of what gets stowed.
+A directory here that is not in that array is never linked; a name in that array
+without a matching tracked directory aborts the run.
 
 ## What this repo deliberately does NOT track
 
@@ -108,8 +131,8 @@ These live outside the dotfiles by design. If you set up a new machine, here's w
 | Asset | Where it lives | Why not tracked | Recovery |
 |---|---|---|---|
 | `~/zk/` (personal Zettelkasten vault) | Its own git repo | Separate concern — your notes, not your shell config | `git clone <your-zk-remote> ~/zk` then `python3 -m venv ~/zk/.venv && ~/zk/.venv/bin/pip install click pyyaml`, then `ln -s ~/zk/bin/zk ~/.local/bin/zk` |
-| `~/.local/share/navi/cheats/*.cheat` | Loose files in `~/.local/share/` | Cheatsheets are recipes — easy to regenerate from the tools they describe | Copy the directory by `scp` from your old machine, or regenerate by reading each tool's `--help` |
 | `~/zk/.venv/` (Python venv for `zk`) | Inside the zk repo (gitignored) | Venvs are machine-specific binaries | Recreate per the zk recovery row above |
+| SSH keys and `~/.ssh/config` | `~/.ssh/`, never in git | Identity is per-machine, and work/personal are kept separate on purpose | Generate a fresh key per machine; see `docs/solutions/` if the passphrase prompts get noisy |
 
 The principle: track what's **expensive to recreate**, skip what's **easy to rebuild from a recipe**.
 
@@ -163,8 +186,14 @@ Warp, iTerm2, Kitty, and any sixel-capable terminal.
 
 ```bash
 echo 'brew "htop"' >> Brewfile
-brew bundle --file=Brewfile
+brew bundle install --file=Brewfile
+git add Brewfile && git commit -m "Add htop"
 ```
+
+**Add it to the `Brewfile` in the same sitting you install it.** A tool installed
+by hand works on this machine and is invisible everywhere else. The gap only
+surfaces on a fresh machine, usually as a confusing error from something
+downstream. See `docs/solutions/fresh-machine-missing-tools.md`.
 
 ### Add a file to an existing package
 
@@ -205,8 +234,17 @@ rm ~/.zsh_plugins.zsh && exec zsh
 
 **Vi mode feels wrong.** Flip line 9 of `zsh/.zshrc` from `bindkey -v` (vi) to `bindkey -e` (emacs, the zsh default).
 
+**A command that should exist doesn't, on a fresh machine.** The tool is probably
+installed on your old laptop but missing from the `Brewfile`. Confirm with
+`brew list --formula | grep <tool>` on the old machine and `grep <tool> Brewfile`
+here. Full writeup: `docs/solutions/fresh-machine-missing-tools.md`.
+
+**`stow` says "does not contain package X".** `X` is in the `PACKAGES` array in
+`init.sh` but its directory was never committed. `git status` will show it as
+`??`. Note that `git commit -am` does not stage new files, which is the usual cause.
+
 **Nuke everything and start over.**
 ```bash
-cd ~/dotfiles && stow -D -t ~ zsh git tmux starship misc
+cd ~/dotfiles && stow -D -t ~ zsh git tmux starship misc bin navi nvim ghostty
 ```
 All config lives in the repo, so nothing is lost — just re-run `./init.sh` when ready.
