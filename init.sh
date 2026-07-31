@@ -45,13 +45,20 @@ if $needed_backup; then
   echo "==> Backed up colliding files to $backup_dir"
 fi
 
-mkdir -p "$HOME/.config" "$HOME/.local/bin"
+mkdir -p "$HOME/.config" "$HOME/.local/bin" "$HOME/.local/share"
 
 # 3. Stow every package. -R is restow: idempotent.
+#
+# --no-folding is load-bearing. By default stow "tree folds": if a destination
+# directory does not exist yet, it symlinks the whole directory into this repo
+# instead of linking each file. On a fresh machine that turned ~/.local/share
+# into a symlink to navi/.local/share, so Neovim and Mason wrote ~1,300 files
+# of plugins and language servers directly into the repo. --no-folding creates
+# real directories and links only files, so no tool can ever write in here.
 cd "$DOTFILES_DIR"
 for pkg in "${PACKAGES[@]}"; do
   echo "==> Stowing $pkg"
-  stow -R -t "$HOME" "$pkg"
+  stow --no-folding -R -t "$HOME" "$pkg"
 done
 
 echo ""
