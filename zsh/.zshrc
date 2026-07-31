@@ -6,7 +6,27 @@
 # Zsh options
 setopt AUTO_CD              # Type directory name to cd into it
 setopt CORRECT              # Suggest corrections for typos
-bindkey -v                  # Vi keybindings
+bindkey -v                  # Vi keybindings (see "Keybindings" section below)
+
+# ------------------------------------------------------------------------------
+# Terminal UI ownership
+# ------------------------------------------------------------------------------
+# Warp does not use a standard PTY line editor. It has a custom input box that
+# intercepts keystrokes before they reach ZLE, and it natively renders the
+# prompt, autosuggestions, syntax highlighting and history search. Anything that
+# hooks ZLE fights that input box: Warp's known-issues page names
+# zsh-autosuggestions and fzf specifically. So the shell only supplies its own
+# UI when the terminal isn't already providing one.
+#
+# herdr panes inherit TERM_PROGRAM from the server's launch env, which may be
+# WarpTerminal even when viewed through another terminal. So honor the Warp
+# opt-out only when NOT inside a herdr pane ($HERDR_ENV=1 is set in every pane).
+#
+# Referenced by name from .zsh_plugins.txt via antidote's `conditional:`
+# annotation, so it must be defined before the static plugin file is sourced.
+shell_owns_ui() {
+  [[ "$TERM_PROGRAM" != "WarpTerminal" || -n "$HERDR_ENV" ]]
+}
 
 # ------------------------------------------------------------------------------
 # Antidote Plugin Manager
@@ -28,12 +48,9 @@ fi
 source ${zsh_plugins}.zsh
 
 # ------------------------------------------------------------------------------
-# Starship Prompt (disabled in Warp which has its own prompt features).
-# herdr panes inherit TERM_PROGRAM from the server's launch env, which may be
-# WarpTerminal even when viewed through another terminal — so honor the Warp
-# opt-out only when NOT inside a herdr pane ($HERDR_ENV=1 is set in every pane).
+# Starship Prompt (disabled in Warp, which draws its own prompt).
 # ------------------------------------------------------------------------------
-if [[ "$TERM_PROGRAM" != "WarpTerminal" || -n "$HERDR_ENV" ]]; then
+if shell_owns_ui; then
   eval "$(starship init zsh)"
 fi
 
@@ -43,9 +60,34 @@ fi
 eval "$(zoxide init zsh)"
 
 # ------------------------------------------------------------------------------
-# FZF
+# FZF (binds ZLE widgets to ^R/^T/Alt-C; Warp provides its own history search)
 # ------------------------------------------------------------------------------
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if shell_owns_ui; then
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+fi
+
+# ------------------------------------------------------------------------------
+# Keybindings
+# ------------------------------------------------------------------------------
+# Vi mode (`bindkey -v` above) leaves insert mode nearly unusable for line
+# editing: zsh's viins keymap binds ^A/^E/^K to self-insert, so they type a
+# literal control character. Worse, the vi-* kill widgets (vi-kill-line on ^U,
+# vi-backward-kill-word on ^W, vi-backward-delete-char on backspace) refuse to
+# delete past the point where insert mode began, so they silently no-op after
+# leaving and re-entering insert. Warp hides all of this because its own input
+# box implements these keys and never consults the keymap.
+#
+# Graft the emacs-style editing keys onto insert mode only. Normal mode is
+# untouched, so hjkl/w/b/ciw all still work. This runs last so it wins over
+# anything the plugins or fzf bind.
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^K' kill-line
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^U' backward-kill-line
+bindkey -M viins '^Y' yank
+bindkey -M viins '^?' backward-delete-char   # backspace
+bindkey -M viins '^H' backward-delete-char   # ctrl-backspace on some terminals
 
 # ------------------------------------------------------------------------------
 # Development Tools

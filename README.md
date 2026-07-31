@@ -140,7 +140,28 @@ The principle: track what's **expensive to recreate**, skip what's **easy to reb
 
 ### Keybindings
 
-Vi mode is on (`bindkey -v` in `.zshrc`). Insert mode is the default and looks like a normal shell — press `Esc` for normal mode (`hjkl`, `dw`, `cc`, etc.). `Ctrl+R` (fzf history search) works from either mode.
+Vi mode is on (`bindkey -v` in `.zshrc`). Insert mode is the default and looks like a normal shell. Press `Esc` for normal mode (`hjkl`, `dw`, `cc`, etc.).
+
+Zsh's stock insert-mode keymap is close to unusable for line editing: it binds `Ctrl+A`/`Ctrl+E`/`Ctrl+K` to *self-insert* (they type a literal control character), and its `vi-*` kill widgets refuse to delete past the point where insert mode began, so `Ctrl+U` and `Ctrl+W` silently no-op after you leave and re-enter insert. So the emacs-style editing keys are grafted back onto insert mode only, leaving normal mode untouched:
+
+| Key | Does |
+|---|---|
+| `Ctrl+A` / `Ctrl+E` | Start / end of line |
+| `Ctrl+W` | Delete word backward |
+| `Ctrl+U` | Delete to start of line |
+| `Ctrl+K` | Delete to end of line |
+| `Ctrl+Y` | Paste what you just killed |
+| `Ctrl+R` | fzf history search (outside Warp; Warp has its own) |
+
+### Warp vs. everything else
+
+Warp does not use a standard PTY line editor. It has a custom input box that intercepts keystrokes before they reach zsh's line editor (ZLE), and it natively renders the prompt, autosuggestions, syntax highlighting, and history search. Anything that hooks ZLE fights that input box, which is why [Warp's own known-issues page](https://docs.warp.dev/help/known-issues) names `zsh-autosuggestions` and `fzf`.
+
+So `.zshrc` defines a single predicate, `shell_owns_ui`, and gates four things on it: starship, zsh-autosuggestions, zsh-syntax-highlighting, and fzf. In Warp they stay off and you get Warp's native versions; everywhere else the shell supplies them. The two plugins are gated through antidote's `conditional:` annotation in `.zsh_plugins.txt`, which bakes a real `if` into the generated `.zsh_plugins.zsh`.
+
+One wrinkle worth knowing: herdr panes inherit `TERM_PROGRAM=WarpTerminal` from the server's launch env even when you view them through Ghostty, so `shell_owns_ui` also checks `$HERDR_ENV` and treats a herdr pane as not-Warp. Zoxide loads unconditionally; it's a `cd` wrapper and never touches ZLE.
+
+Check what a terminal reports with `echo $TERM_PROGRAM`.
 
 ### Navigation
 
@@ -232,7 +253,7 @@ stow -R -t ~ <pkg>   # restow (idempotent; fixes drift)
 rm ~/.zsh_plugins.zsh && exec zsh
 ```
 
-**Vi mode feels wrong.** Flip line 9 of `zsh/.zshrc` from `bindkey -v` (vi) to `bindkey -e` (emacs, the zsh default).
+**Vi mode feels wrong.** The emacs editing keys (`Ctrl+A/E/K/W/U/Y`) already work in insert mode, so try those first. To drop vi mode entirely, flip `bindkey -v` near the top of `zsh/.zshrc` to `bindkey -e` (emacs, the zsh default); the `bindkey -M viins` lines further down then become inert.
 
 **A command that should exist doesn't, on a fresh machine.** The tool is probably
 installed on your old laptop but missing from the `Brewfile`. Confirm with

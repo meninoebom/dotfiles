@@ -9,6 +9,9 @@ ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/ssh-agent
 ohmyzsh/ohmyzsh path:plugins/colored-man-pages
 
-# Syntax highlighting and autosuggestions (load last)
-zsh-users/zsh-autosuggestions
-zsh-users/zsh-syntax-highlighting
+# Syntax highlighting and autosuggestions (load last).
+# These hook ZLE widgets, which conflicts with Warp's custom input box (Warp
+# renders both natively). `conditional:` wraps each in `if shell_owns_ui; then`
+# in the generated .zsh_plugins.zsh; the function is defined in .zshrc.
+zsh-users/zsh-autosuggestions conditional:shell_owns_ui
+zsh-users/zsh-syntax-highlighting conditional:shell_owns_ui
