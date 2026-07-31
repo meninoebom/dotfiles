@@ -1,0 +1,48 @@
+# Ghostty config — defaults are good, so keep this minimal.
+# Docs: ghostty +show-config --default --docs
+
+# Custom theme sampled from Brandon's Warp theme:
+# dark teal-green background, near-white text, coral/orange/teal/pink accents.
+background = #022b35
+foreground = #f8f8f2
+cursor-color = #c94c22
+cursor-text = #ffffff
+
+# High-contrast solid selection
+selection-background = #c94c22
+selection-foreground = #ffffff
+
+# ANSI palette (normal 0-7, bright 8-15) tuned for readability on the dark teal
+palette = 0=#0e353e
+palette = 1=#fd6d82
+palette = 2=#3dc9ab
+palette = 3=#f4bf75
+palette = 4=#6ab0c9
+palette = 5=#db669e
+palette = 6=#4fd0c5
+palette = 7=#d8e2e4
+palette = 8=#7695a0
+palette = 9=#ff8fa0
+palette = 10=#5ee8c5
+palette = 11=#ffd9a0
+palette = 12=#8fd0e8
+palette = 13=#f28cbf
+palette = 14=#7ce8dd
+palette = 15=#ffffff
+
+# Readability: thicker glyph rendering + guaranteed text/background contrast
+font-thicken = true
+minimum-contrast = 1.7
+font-size = 16
+
+# Quality-of-life
+copy-on-select = clipboard
+macos-titlebar-style = tabs
+
+# Keybinds — Ghostty's macOS defaults already cover the conventions
+# (cmd+t tab, cmd+d/cmd+shift+d splits, cmd+opt+arrows to navigate,
+# cmd+k clear). Only additions live here.
+# Shift+Enter inserts a literal newline (multi-line input in CLI agents/REPLs)
+keybind = shift+enter=text:\n
+# Fast config iteration
+keybind = cmd+shift+comma=reload_config

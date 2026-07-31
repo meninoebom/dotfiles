@@ -1,0 +1,57 @@
+% herdr, tmux, panes, workspaces, agents, multiplexer
+
+# herdr: launch or reattach to the persistent session
+herdr
+
+# herdr: attach to a remote always-on herdr over ssh
+herdr --remote <ssh-target>
+
+# herdr: show client + server health
+herdr status
+
+# herdr: list named sessions
+herdr session list
+
+# herdr: attach to a named session
+herdr session attach <name>
+
+# herdr: stop a session (shut it down; state kept)
+herdr session stop <name>
+
+# herdr: stop the whole server (all sessions)
+herdr server stop
+
+# herdr: list workspaces
+herdr workspace list
+
+# herdr: create a workspace rooted in the current dir (name it by cd-ing to the repo first)
+herdr workspace create
+
+# herdr: list agents and their states
+herdr agent list
+
+# herdr: reload config.toml without restarting
+herdr server reload-config
+
+# --- keybindings (reference only; prefix is Ctrl+b, then the key) ---
+
+# herdr key: show the built-in keybinding help overlay
+echo "Ctrl+b ?  = help overlay (live, always accurate)"
+
+# herdr key: detach (session keeps running in background)
+echo "Ctrl+b q  = detach"
+
+# herdr key: split current pane (try both to see side-by-side vs stacked)
+echo "Ctrl+b v  = split one way   |   Ctrl+b -  = split the other way"
+
+# herdr key: move focus between panes (vim directions)
+echo "Ctrl+b h/j/k/l  = focus pane left/down/up/right   |   Ctrl+b Tab = cycle"
+
+# herdr key: zoom a pane fullscreen, or close it
+echo "Ctrl+b z  = zoom pane (toggle)   |   Ctrl+b x  = close pane"
+
+# herdr key: tabs (inside a workspace)
+echo "Ctrl+b c  = new tab   |   Ctrl+b 1..9 = jump to tab   |   Ctrl+b n/p = next/prev"
+
+# herdr key: workspaces (one per repo; the left sidebar)
+echo "Ctrl+b Shift+n = new workspace   |   Ctrl+b w = picker   |   Ctrl+b Shift+d = close"
