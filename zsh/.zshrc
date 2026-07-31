@@ -57,7 +57,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Java
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+zulu17=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+[[ -d $zulu17 ]] && export JAVA_HOME=$zulu17
+unset zulu17
 
 # Android SDK
 export ANDROID_HOME=$HOME/Library/Android/sdk
@@ -72,7 +74,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 
 # Windsurf/Codeium
-export PATH="/Users/brandon/.codeium/windsurf/bin:$PATH"
+[[ -d "$HOME/.codeium/windsurf/bin" ]] && export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
 # Local bin
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
@@ -88,20 +90,20 @@ source ~/.aliases.sh
 export PATH="$HOME/.local/bin:$PATH"
 
 # OpenClaw Completion
-source "/Users/brandon/.openclaw/completions/openclaw.zsh"
+[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
 
 # Vite+ bin (https://viteplus.dev)
-. "$HOME/.vite-plus/env"
+[[ -f "$HOME/.vite-plus/env" ]] && . "$HOME/.vite-plus/env"
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 # pnpm
-export PNPM_HOME="/Users/brandon/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 # >>> blaze >>>
-source /Users/brandon/.blaze/blaze.zsh
+[[ -f "$HOME/.blaze/blaze.zsh" ]] && source "$HOME/.blaze/blaze.zsh"
 # <<< blaze <<<
