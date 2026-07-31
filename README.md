@@ -33,7 +33,7 @@ flowchart TD
         GH[ghostty/]
     end
 
-    IS -->|brew bundle install| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, ripgrep,<br/>tmux, herdr, glow, navi,<br/>neovim, tree-sitter-cli,<br/>chafa, ghostty)"]
+    IS -->|brew bundle install| TOOLS["Homebrew tools<br/>(stow, antidote, starship,<br/>zoxide, fzf, eza, ripgrep,<br/>tmux, herdr, glow, navi,<br/>neovim, tree-sitter-cli,<br/>chafa, ghostty, node …<br/>plus the daily toolchain:<br/>gh, doppler, mise, uv,<br/>docker, flyctl, and more.<br/>Brewfile is the full list)"]
     IS -->|stow| LINKS
 
     subgraph LINKS["$HOME symlinks"]

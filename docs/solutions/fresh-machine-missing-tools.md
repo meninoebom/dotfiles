@@ -11,6 +11,10 @@ still broken. The failure rarely names the real cause. Observed forms:
 - A plugin throws a wall of errors that looks like a plugin bug. Neovim's
   treesitter on the `main` branch errors when `tree-sitter-cli` is missing,
   because that branch compiles parsers itself.
+- A plugin reports "failed to install" for reasons unrelated to the plugin.
+  Mason's `ensure_installed = { "lua_ls", "ts_ls", "pyright" }` installed only
+  `lua_ls` on a fresh machine: that one ships a standalone binary, while the
+  other two are distributed through npm and there was no `node`.
 - `stow` aborts with "does not contain package X".
 
 ## Root cause
@@ -69,5 +73,13 @@ concluding anything is absent.
 - When a config file references an external tool, that tool belongs in the
   `Brewfile` with a comment naming what needs it. A cheatsheet, an alias, or a
   plugin spec that mentions a binary is a dependency declaration.
+- Watch for **indirect** dependencies, which grepping cannot find. `init.lua`
+  never says "node" anywhere; it says `ts_ls` and `pyright`, and those happen to
+  be npm packages. The rule is to ask how each named artifact is *delivered*,
+  not just whether its own name appears in the `Brewfile`.
+- A runtime supplied by a version manager (nvm, mise, pyenv) is invisible to
+  `brew leaves` and to the drift check above. If a tool needs `node` on PATH,
+  the `Brewfile` needs `node`, regardless of what nvm provides on the machine
+  you happen to be sitting at.
 - Before trusting a fresh-machine setup, run the two comparison commands above
   on the old machine rather than waiting to discover gaps one error at a time.
