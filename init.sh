@@ -9,7 +9,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
-PACKAGES=(zsh git tmux starship misc bin navi nvim ghostty)
+PACKAGES=(zsh git tmux starship bin navi nvim ghostty)
 
 echo "==> Dotfiles setup ($DOTFILES_DIR)"
 
@@ -27,8 +27,10 @@ fi
 # 2. Back up colliding files so Stow can do its thing.
 backup_dir="$HOME/dotfiles_old_$(date +%Y%m%d_%H%M%S)"
 needed_backup=false
+# .netrc is deliberately absent: credential files are never tracked here. See
+# docs/solutions/credentials-must-not-live-in-this-repo.md.
 for f in .zshrc .zsh_plugins.txt .aliases.sh .gitconfig .gitignore_global \
-         .tmux.conf .netrc; do
+         .tmux.conf; do
   if [[ -f "$HOME/$f" && ! -L "$HOME/$f" ]]; then
     needed_backup=true
     mkdir -p "$backup_dir"
