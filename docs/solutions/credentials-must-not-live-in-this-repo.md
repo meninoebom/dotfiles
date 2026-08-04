@@ -60,6 +60,32 @@ is dead, everything else is housekeeping.
    rewrites every commit SHA from the affected commit onward, so other clones
    must re-clone or hard-reset — see below.
 
+   Two traps here, both hit on the first attempt:
+
+   - **`--path misc` was not enough.** Before the stow migration the file lived
+     at `netrc` in the repo root, so the blob survived a rewrite that only
+     targeted the modern path. Enumerate every path the secret ever occupied
+     before rewriting:
+
+     ```bash
+     git rev-list --objects --all | awk '{ $1=""; sub(/^ /,""); print }' \
+       | sort -u | grep -iE 'netrc|\.env|secret|token|\.pem$|\.key$'
+     ```
+
+     Then verify by content, not by path — grep every blob in history for the
+     actual secret value and confirm zero hits.
+
+   - **The force-push does not remove the blob from GitHub.** Confirmed
+     immediately after this rewrite: the orphaned blob was still served by SHA
+     via `gh api repos/OWNER/REPO/git/blobs/<sha>`, returning the full
+     credential, and the old commit still resolved. GitHub keeps unreachable
+     objects until it garbage-collects, and offers no user-facing trigger for
+     that. To get them dropped sooner, open a request with GitHub Support
+     (https://support.github.com/) citing the repo and the SHAs.
+
+   Which is the whole reason rotation is step 1. The rewrite tidies the repo; it
+   does not end the exposure.
+
 ## Consequence for other machines
 
 A history rewrite changes commit SHAs. Any other machine with a clone will have
