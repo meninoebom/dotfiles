@@ -106,6 +106,41 @@ rm -f ~/.netrc
 Do not `git pull` on a machine with a divergent history — it creates a merge
 that reintroduces the leaked blob.
 
+### The reset is not the end of it
+
+`git reset --hard` moves the branch pointer but leaves the old commits
+reflog-reachable, so the credential is still sitting in that clone in plaintext.
+Confirmed on the second machine on 2026-08-04, after the reset had already run:
+
+```bash
+git rev-parse b10ec02:misc/.netrc   # still resolved; blob still readable
+```
+
+This is not an exposure by itself (nothing pushes from the reflog, and `origin`
+is already purged), but the clone keeps the secret until the objects are
+expunged:
+
+```bash
+git log --branches --not --remotes --oneline   # must print nothing first
+git reflog expire --expire=now --expire-unreachable=now --all
+git gc --prune=now
+git fsck                                       # expect no errors
+```
+
+**Order matters if that clone had unpushed commits.** The `reset --hard`
+discards them and expiring the reflog then destroys the only remaining copy.
+Recover and push first, expunge second:
+
+```bash
+git reflog                # find the orphaned commit
+git cherry-pick <sha>     # replay it onto the rewritten history
+git push
+```
+
+`reset --hard` can also leave `refs/remotes/origin/HEAD` dangling if it pointed
+at a branch name the rewrite retired, which makes `git fsck` report an invalid
+sha1 pointer. Repair with `git remote set-head origin -a`.
+
 ## Rule going forward
 
 Credentials never enter this repo, not even ignored. They live in Doppler, or as
