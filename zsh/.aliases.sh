@@ -27,6 +27,13 @@ alias desk="cd ~/Desktop"
 alias dev="cd ~/dev"
 alias dotfiles="cd ~/dotfiles"
 
+# Knowledge repos. Both are cloned on every machine, so they belong here rather
+# than in the local file. They are siblings, not parent and child: `knowledge`
+# is the corpus plus the `kb` CLI that writes it, `knowledge-base` is the
+# cross-project engineering reference that agents read before starting work.
+alias knowledge='cd ~/dev/knowledge'
+alias knowledge-base='cd ~/projects/knowledge-base'
+
 # Git
 alias ghist="git log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias git-pull-submodules="git submodule foreach git pull origin master"
@@ -46,7 +53,6 @@ alias dkillf='docker kill $1'
 alias cc='claude --dangerously-skip-permissions'
 alias cc-config='cd ~/.claude/'
 alias commands='cd ~/.claude/commands/'
-alias knowledge='cd ~/.claude/knowledge-base/'
 alias agents='cd ~/.claude/agents/'
 
 # ------------------------------------------------------------------------------
