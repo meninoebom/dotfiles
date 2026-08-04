@@ -1,3 +1,12 @@
+# Shared aliases — these should make sense on every machine.
+#
+# Machine-specific aliases (project directories, remote hosts, local services)
+# belong in ~/.aliases.local.sh, which is untracked and never syncs.
+#
+# Directory jumping is mostly handled by zoxide (`z <partial-name>`), which
+# learns paths as you visit them and needs no per-machine config. Prefer that
+# over adding a `cd` alias here.
+
 # Frequently used commands
 alias path='tr ":" "\n" <<< "$PATH"'
 alias ls="eza"
@@ -9,40 +18,14 @@ alias lta='eza --tree --all'
 # Edit frequently used files
 alias hosts="sudo nvim /etc/hosts"
 alias aliases="nvim ~/.aliases.sh"
+alias aliases-local="nvim ~/.aliases.local.sh"
 alias zshrc="nvim ~/.zshrc"
 
 # Go to frequently used directories
 alias up="cd .."
-alias dev="cd ~/dev"
-alias projects="cd ~/projects"
-alias sandbox="cd ~/dev/sandbox"
-alias writing="cd ~/writing"
 alias desk="cd ~/Desktop"
-alias civiqs="cd ~/dev/civiqs/code"
-
-# Apps
+alias dev="cd ~/dev"
 alias dotfiles="cd ~/dotfiles"
-alias courtdocs="cd ~/dev/courtdocs"
-alias prep="cd ~/dev/interview-prep"
-alias interview="cd ~/dev/interview-prep"
-alias advent="cd ~/dev/interview-prep/advent-of-code"
-alias breadcrumbs="cd ~/dev/breadcrumbs"
-alias tend="cd ~/dev/tend"
-alias alleeoop="cd ~/dev/alleeoop"
-alias harvest="cd ~/dev/harvest-and-spice"
-alias job="cd ~/dev/job-search"
-alias lineage="cd ~/dev/lineage"
-
-# RALF
-alias ralf="cd ~/dev/ralf"
-alias gesture="cd ~/dev/ralf/ralf-gesture-studio"
-alias mediapipe="cd ~/dev/ralf/mediapipe"
-alias sound="cd ~/dev/ralf/sound-engine"
-alias song="cd ~/dev/song-space"
-alias blender="cd ~/dev/blender"
-
-# Remote servers
-alias amazon="ssh bbrown@107.20.254.191"
 
 # Git
 alias ghist="git log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -50,18 +33,14 @@ alias git-pull-submodules="git submodule foreach git pull origin master"
 alias gpush='git push'
 alias gpull='git pull'
 
+# Docker
 alias dps='docker ps --format "table {{.Names}}\t{{.Ports}}"'
 alias containers='docker ps --format "table {{.Names}}\t{{.Ports}}"'
 alias images='docker images --format "table {{.ID}}\t{{.Repository}}\t{{.Tag}}"'
-
-# Docker
 alias dstop='docker stop $1'
 alias drm='docker rm $1'
 alias dstopall='docker stop $(docker ps -q)'
 alias dkillf='docker kill $1'
-
-# Project Dashboard
-alias dashboard="make -C ~/dev/project-dashboard run"
 
 # Claude Code
 alias cc='claude --dangerously-skip-permissions'
@@ -69,3 +48,10 @@ alias cc-config='cd ~/.claude/'
 alias commands='cd ~/.claude/commands/'
 alias knowledge='cd ~/.claude/knowledge-base/'
 alias agents='cd ~/.claude/agents/'
+
+# ------------------------------------------------------------------------------
+# Machine-local aliases (untracked, never syncs between machines)
+# ------------------------------------------------------------------------------
+# To promote a local alias to every machine, move the line up into this file and
+# commit it. To demote one, move it down into ~/.aliases.local.sh.
+[[ -f ~/.aliases.local.sh ]] && source ~/.aliases.local.sh
