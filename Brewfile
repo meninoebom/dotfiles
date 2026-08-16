@@ -44,6 +44,7 @@ brew "gum"         # bin/.local/bin/ports needs it for sweep mode
 brew "docker"      # the dps/containers/images/dstop aliases in .aliases.sh
 brew "docker-compose"
 brew "pandoc"      # documented in navi/…/pandoc.cheat
+brew "m1ddc"       # raycast/…/switch-monitor-input.sh sends DDC/CI to the KVM
 
 # ------------------------------------------------------------------------------
 # Git + GitHub
