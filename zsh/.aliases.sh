@@ -50,7 +50,6 @@ alias dstopall='docker stop $(docker ps -q)'
 alias dkillf='docker kill $1'
 
 # Claude Code
-alias cc='claude --dangerously-skip-permissions'
 alias cc-config='cd ~/.claude/'
 alias commands='cd ~/.claude/commands/'
 alias agents='cd ~/.claude/agents/'
