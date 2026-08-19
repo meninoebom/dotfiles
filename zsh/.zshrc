@@ -1,6 +1,10 @@
 # ~/.zshrc - Antidote + Starship + Zoxide
 
-# Ensure Homebrew is on PATH (needed when .zprofile isn't sourced, e.g. IDE terminals)
+# Bootstrap Homebrew onto PATH. There is no ~/.zprofile on this machine, so this
+# is the only thing that makes `brew` resolvable, and the antidote/starship/zoxide
+# lines below all depend on it. This must stay at the top -- it cannot be the
+# "activated last" copy. See the PATH precedence section at the end of the file,
+# which re-asserts Homebrew's position after everything else has edited PATH.
 [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Zsh options
@@ -63,7 +67,9 @@ eval "$(zoxide init zsh)"
 # FZF (binds ZLE widgets to ^R/^T/Alt-C; Warp provides its own history search)
 # ------------------------------------------------------------------------------
 if shell_owns_ui; then
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  # Modern fzf (0.48+) generates its own shell integration; no ~/.fzf.zsh to
+  # install or keep in sync. This one line binds ^R/^T/Alt-C and fuzzy completion.
+  source <(fzf --zsh)
 fi
 
 # ------------------------------------------------------------------------------
@@ -149,3 +155,36 @@ esac
 # >>> blaze >>>
 [[ -f "$HOME/.blaze/blaze.zsh" ]] && source "$HOME/.blaze/blaze.zsh"
 # <<< blaze <<<
+
+# ==============================================================================
+# PATH precedence -- KEEP THESE TWO BLOCKS LAST, IN THIS ORDER
+# ==============================================================================
+# PATH is scanned left to right and the first match wins, so the FRONT takes
+# precedence. Both blocks below prepend, which is why running them last is what
+# puts them in front. Anything appended here would lose instead of win, so new
+# PATH edits go ABOVE this section, not below it.
+#
+# This matters because the sections above prepend freely (bun, pnpm, windsurf,
+# ~/.local/bin), and each one pushes Homebrew further back.
+
+# --- 1. Homebrew --------------------------------------------------------------
+# Re-assert Homebrew at the front. This is not a redundant copy of the bootstrap
+# at the top of the file: this Homebrew routes shellenv through path_helper, which
+# rebuilds PATH with /opt/homebrew/{bin,sbin} first and leaves every other entry in
+# its existing relative order -- it re-hoists rather than duplicating. Without this
+# line, ~/.local/bin and the bun/pnpm prepends sit ahead of /opt/homebrew/bin.
+#
+# The payoff is `bash`: Apple ships 3.2.57 at /bin/bash and never updates it
+# (it is GPLv2-pinned). Homebrew's bash is 5.x, and Homebrew being in front is the
+# only reason `bash` resolves to it. Scripts must use `#!/usr/bin/env bash` to
+# benefit -- a hardcoded `#!/bin/bash` shebang ignores PATH and gets 3.2 anyway.
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# --- 2. mise ------------------------------------------------------------------
+# mise activates dead last so it overrides everything, including Homebrew.
+# `mise activate zsh` snapshots the current PATH into __MISE_ORIG_PATH and then
+# re-derives PATH on every prompt from that snapshot via a precmd hook. Activating
+# it any earlier would capture a stale base, and the hook would keep re-imposing
+# that stale PATH on each prompt -- so this is a hard ordering requirement, not a
+# stylistic one.
+[[ -x /opt/homebrew/bin/mise ]] && eval "$(/opt/homebrew/bin/mise activate zsh)"

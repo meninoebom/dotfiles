@@ -324,6 +324,27 @@ require("lazy").setup({
     },
   },
 
+  -- Oil: edit the filesystem like a buffer. `-` opens the parent directory as
+  -- a normal, editable buffer -- rename by editing a line, delete with `dd`,
+  -- create files/dirs by adding lines, then `:w` to apply. No separate tree
+  -- pane to keep in sync; the directory *is* the buffer.
+  --
+  -- No icon plugin here on purpose. Oil defaults to an "icon" column, which
+  -- would need mini.icons (or web-devicons) *and* a Nerd Font to render glyphs.
+  -- Dropping that column means one fewer dependency and no font requirement --
+  -- you just get plain filenames, with a trailing `/` marking directories.
+  --
+  -- Loaded eagerly (lazy = false) so `-` works from the very first buffer,
+  -- including the directory Neovim opens when you launch `nvim .`.
+  {
+    "stevearc/oil.nvim",
+    opts = { columns = {} },
+    keys = {
+      { "-", "<cmd>Oil<CR>", desc = "Open parent directory" },
+    },
+    lazy = false,
+  },
+
   -- which-key: pop-up cheatsheet. Pause after <leader> and it shows your maps.
   { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
 
