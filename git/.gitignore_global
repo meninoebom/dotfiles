@@ -4,4 +4,7 @@
 # VS Code workspace files
 *.code-workspace
 
+# Zed project-local config
+.zed/
+
 **/.claude/settings.local.json
