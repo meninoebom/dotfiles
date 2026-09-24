@@ -51,6 +51,7 @@ brew "m1ddc"       # raycast/…/switch-monitor-input.sh sends DDC/CI to the KVM
 # ------------------------------------------------------------------------------
 brew "gh"
 brew "lazygit"
+brew "git-delta"  # binary is `delta`; .gitconfig sets it as pager + diffFilter
 
 # ------------------------------------------------------------------------------
 # Secrets + environment
