@@ -34,11 +34,6 @@ alias dotfiles="cd ~/dotfiles"
 alias knowledge='cd ~/dev/knowledge'
 alias knowledge-base='cd ~/projects/knowledge-base'
 
-# Git
-alias ghist="git log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias git-pull-submodules="git submodule foreach git pull origin master"
-alias gpush='git push'
-alias gpull='git pull'
 
 # Docker
 alias dps='docker ps --format "table {{.Names}}\t{{.Ports}}"'

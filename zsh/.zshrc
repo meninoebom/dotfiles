@@ -99,6 +99,10 @@ bindkey -M viins '^H' backward-delete-char   # ctrl-backspace on some terminals
 # Development Tools
 # ------------------------------------------------------------------------------
 
+# Default editor
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # NVM (Node Version Manager)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

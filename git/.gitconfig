@@ -7,7 +7,7 @@
 	editor = vim
 	autocrlf = false
 	safecrlf = true
-	pager = cat
+	pager = delta
 
 [push]
 	default = current
@@ -33,20 +33,40 @@
 
 [alias]
 	st = status
-	co = checkout
+	sw = switch
+	swc = switch -c
+	res = restore
 	cm = commit
 	br = branch
 	gl = log --oneline --decorate --graph
 	g = log --graph --decorate --pretty=oneline --abbrev-commit --no-show-signature
-	hist = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	hist = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	type = cat-file -t
 	dump = cat-file -p
 	ignored = !git ls-files -v | grep "^[[:lower:]]"
 	clearstage = rm -r --cached
 	brs = branch --sort=committerdate
+	dft = difftool
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	colorMoved = default
+	tool = difftastic
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft \"$LOCAL\" \"$REMOTE\"
+[pager]
+	difftool = true

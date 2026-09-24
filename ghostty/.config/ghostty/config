@@ -46,3 +46,5 @@ macos-titlebar-style = tabs
 keybind = shift+enter=text:\n
 # Fast config iteration
 keybind = cmd+shift+comma=reload_config
+
+shell-integration-features = cursor,title,ssh-terminfo,ssh-env
