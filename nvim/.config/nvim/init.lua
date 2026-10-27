@@ -188,9 +188,9 @@ require("lazy").setup({
       -- markdown_inline matters more than it looks: `markdown` injects it for code
       -- fences and inline spans, and it was missing from the old parser set.
       ts.install({
-        "bash", "css", "diff", "html", "javascript", "json", "lua", "markdown",
-        "markdown_inline", "python", "query", "rust", "toml", "tsx", "typescript",
-        "vim", "vimdoc", "yaml",
+        "bash", "css", "diff", "hcl", "html", "javascript", "json", "lua", "markdown",
+        "markdown_inline", "python", "query", "rust", "terraform", "toml", "tsx",
+        "typescript", "vim", "vimdoc", "yaml",
       })
 
       vim.api.nvim_create_autocmd("FileType", {
@@ -252,7 +252,7 @@ require("lazy").setup({
       -- a standalone binary that drifts from your toolchain, and a rust-analyzer
       -- built against a different Rust than your code produces phantom errors.
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "pyright" },
+        ensure_installed = { "lua_ls", "ts_ls", "pyright", "bashls", "terraformls" },
       })
 
       -- Tell every server what completion capabilities the client has. You already
