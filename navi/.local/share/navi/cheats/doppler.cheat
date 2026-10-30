@@ -1,0 +1,31 @@
+% doppler, secrets, env
+
+# doppler: log in (once per machine)
+doppler login
+
+# doppler: link the current directory to a project and config
+doppler setup -p <project> -c <config>
+
+# doppler: run a command with secrets injected
+doppler run -p <project> -c <config> -- <command>
+
+# doppler: list secret names only (no values)
+doppler secrets -p <project> -c <config> --only-names
+
+# doppler: print one secret's value
+doppler secrets get <name> -p <project> -c <config> --plain
+
+# doppler: set a secret
+doppler secrets set <name>="<value>" -p <project> -c <config>
+
+# doppler: regenerate .env from Doppler
+doppler secrets download -p <project> -c <config> --no-file --format env > .env
+
+# doppler: list projects
+doppler projects
+
+# doppler: list configs in a project
+doppler configs -p <project>
+
+$ project: doppler projects --json | jq -r '.[].name'
+$ config: doppler configs -p <project> --json | jq -r '.[].name'
