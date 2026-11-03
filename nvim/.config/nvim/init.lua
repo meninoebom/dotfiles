@@ -346,7 +346,16 @@ require("lazy").setup({
   },
 
   -- which-key: pop-up cheatsheet. Pause after <leader> and it shows your maps.
-  { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      spec = {
+        { "<leader>f", group = "find" },
+        { "<leader>a", group = "Claude", mode = { "n", "v" } },
+      },
+    },
+  },
 
 }, {
   -- lazy.nvim UI/behavior options.
