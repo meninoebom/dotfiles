@@ -346,10 +346,27 @@ require("lazy").setup({
   },
 
   -- which-key: pop-up cheatsheet. Pause after <leader> and it shows your maps.
+  --
+  -- Its key labels are Nerd Font glyphs. Ghostty bundles those symbols; other
+  -- terminals (the Claude Code panel) draw them as empty boxes, so outside
+  -- Ghostty the labels fall back to plain text. GHOSTTY_RESOURCES_DIR rather
+  -- than TERM_PROGRAM because it survives into tmux.
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
+      icons = vim.env.GHOSTTY_RESOURCES_DIR == nil and {
+        mappings = false,
+        keys = {
+          Up = "Up ", Down = "Down ", Left = "Left ", Right = "Right ",
+          C = "C-", M = "M-", D = "D-", S = "S-",
+          CR = "Enter ", NL = "Enter ", Esc = "Esc ", BS = "Backspace ",
+          Space = "Space ", Tab = "Tab ",
+          ScrollWheelDown = "WheelDown ", ScrollWheelUp = "WheelUp ",
+          F1 = "F1", F2 = "F2", F3 = "F3", F4 = "F4", F5 = "F5", F6 = "F6",
+          F7 = "F7", F8 = "F8", F9 = "F9", F10 = "F10", F11 = "F11", F12 = "F12",
+        },
+      } or nil,
       spec = {
         { "<leader>f", group = "find" },
         { "<leader>a", group = "Claude", mode = { "n", "v" } },
